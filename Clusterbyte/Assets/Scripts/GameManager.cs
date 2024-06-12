@@ -1,53 +1,103 @@
+using System.Collections.Generic;
+using System.Linq;
+using Entity;
+using Entity.Placeables;
 using Lib;
+using Player;
 using UnityEngine;
 using Viewport;
+using Terrain = Entity.Terrain;
 
 public class GameManager : StateManager
 {
     public static GameManager instance;
 
-    [SerializeField] private GameObject terrainBlockPrefab;
     [SerializeField] private CameraPositioner cam;
-    
+    [SerializeField] private UIExtensible observationUI;
+
     private MouseHover mouseHover;
+    private PlayerStats playerStats;
     private CameraPositioner mainCamera;
+
+    private readonly List<Vector3> terrain = new();
+    private readonly List<GameObject> deployed = new();
+    private readonly List<Vector2> takenPositions = new();
 
     public static GameState SETTING;
     public static GameState OBSERVING;
+    public static GameState EDITING;
     public static GameState ACTIVE;
 
     private void RegenerateField()
     {
-        // TODO: more aware generation for internal state tracking of gameobjects on these squares
-        for (int i = 1; i <= Clusterbyte.GRID_WIDTH; i++)
+        for (int i = 0; i <= Clusterbyte.GRID_WIDTH; i++)
         {
-            for (int j = 1; j <= Clusterbyte.GRID_HEIGHT; j++)
+            for (int j = 0; j <= Clusterbyte.GRID_HEIGHT; j++)
             {
                 // Use Perlin noise to spawn procedurally
                 // This will ensure that the terrain is not too clustered
                 bool shouldSpawn = Mathf.PerlinNoise(i * Random.value, j * Random.value) > 0.5f;
-                if (shouldSpawn)
-                {
-                    Clusterbyte.SpawnAtTile(i, j, terrainBlockPrefab, true);
-                }
+                if (!shouldSpawn)
+                    continue;
+                EntityFactory.Get<Terrain>().SpawnAtGrid(i, j);
+                terrain.Add(Clusterbyte.ConvertTo3D(new Vector2(i, j)));
             }
         }
+    }
+
+    public bool IsOccupied(Vector3 position)
+    {
+        return takenPositions.Contains(Clusterbyte.ConvertTo2D(position));
+    }
+
+    public bool IsTerrain(Vector3 position)
+    {
+        return terrain.Contains(position);
+    }
+
+    public void BuyItem(string itemName)
+    {
+        if (state != OBSERVING)
+            return;
+
+        if (!EntityFactory.TryGet(itemName, out ShopDeployable item))
+            return;
+
+        if (playerStats.TryTransaction(item.cost))
+        {
+            Debug.Log($"Bought {itemName} for {item.cost} tokens.");
+            Vector3 position = mouseHover.hoveredPosition;
+            deployed.Add(Instantiate(item.prefab, position + new Vector3(0, 2, 0), Quaternion.identity));
+            takenPositions.Add(Clusterbyte.ConvertTo2D(position));
+        }
+        else
+        {
+            Debug.Log("Not enough tokens to buy this item.");
+        }
+
+        SetState(SETTING);
     }
 
     internal void Awake()
     {
         instance = this;
-        Clusterbyte.ResetTerrainOccupiedCoordinates();
         TryGetComponent(out mouseHover);
+        TryGetComponent(out playerStats);
+        playerStats.ResetTokens();
 
         SETTING = new GameState(SettingInit, SettingPeriodic, SettingEnd);
         OBSERVING = new GameState(ObservingInit, ObservingPeriodic, ObservingEnd);
+        EDITING = new GameState(EditingInit, EditingPeriodic, EditingEnd);
         ACTIVE = new GameState(ActiveInit, ActivePeriodic, ActiveEnd);
 
         // TODO: states for on game done for new field stuff
         RegenerateField();
 
         SetState(SETTING);
+        ChangeStateOnEvent(() => state == SETTING && Input.GetMouseButtonDown(0) && mouseHover.isHovering && IsOccupied(mouseHover.hoveredPosition), EDITING);
+        // TODO: Setting Mode
+        // ChangeStateOnEvent(() => state == OBSERVING && Input.GetKeyDown(KeyCode.Escape), SETTING);
+        // ChangeStateOnEvent(() => state == EDITING && Input.GetKeyDown(KeyCode.Escape), SETTING);
         ChangeStateOnEvent(() => state == SETTING && Input.GetMouseButtonDown(0) && mouseHover.isHovering, OBSERVING);
     }
 
@@ -55,6 +105,7 @@ public class GameManager : StateManager
     {
         cam.interpolateSpeed = 2;
         cam.SetPosition(CameraPositioner.CameraSpot.SETTING);
+        mouseHover.enabled = true;
     }
 
     private void SettingPeriodic()
@@ -67,10 +118,12 @@ public class GameManager : StateManager
 
     private void ObservingInit()
     {
-        Vector2 worldClicked = mouseHover.worldHoveredPosition;
+        Vector3 worldClicked = mouseHover.hoveredPosition;
         cam.interpolateSpeed = 4;
-        cam.SetObservingSpot(Clusterbyte.ConvertTo3D(worldClicked) + new Vector3(0, 3, -2), Quaternion.Euler(45, 0, 0));
+        cam.SetObservingSpot(worldClicked + new Vector3(0, 3, -2), Quaternion.Euler(45, 0, 0));
         cam.SetPosition(CameraPositioner.CameraSpot.OBSERVING);
+        observationUI.Show();
+        mouseHover.enabled = false;
     }
 
     private void ObservingPeriodic()
@@ -78,6 +131,19 @@ public class GameManager : StateManager
     }
 
     private void ObservingEnd()
+    {
+        observationUI.Hide();
+    }
+
+    private void EditingInit()
+    {
+    }
+
+    private void EditingPeriodic()
+    {
+    }
+
+    private void EditingEnd()
     {
     }
 
