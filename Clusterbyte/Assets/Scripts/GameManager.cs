@@ -1,16 +1,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using Entity;
-using Entity.Placeables;
 using Lib;
 using Player;
 using UnityEngine;
 using Viewport;
-using Terrain = Entity.Terrain;
 
 public class GameManager : StateManager
 {
     public static GameManager instance;
+    public int level;
 
     [SerializeField] private CameraPositioner cam;
     [SerializeField] private UIExtensible observationUI;
@@ -19,7 +18,7 @@ public class GameManager : StateManager
     private PlayerStats playerStats;
     private CameraPositioner mainCamera;
 
-    private readonly List<Vector3> terrain = new();
+    private readonly List<GameObject> placeableTerrain = new();
     private readonly List<GameObject> deployed = new();
     private readonly List<Vector2> takenPositions = new();
 
@@ -28,19 +27,31 @@ public class GameManager : StateManager
     public static GameState EDITING;
     public static GameState ACTIVE;
 
-    private void RegenerateField()
+    /// <summary>
+    /// Parses the current level map and spawns the terrain prefabs accordingly.
+    /// </summary>
+    private void ParseCurrentLevelMap()
     {
-        for (int i = 0; i <= Clusterbyte.GRID_WIDTH; i++)
+        // Loop over every (x,y) grid cell in the level
+        for (int y = 0; y < Clusterbyte.GRID_HEIGHT; y++)
         {
-            for (int j = 0; j <= Clusterbyte.GRID_HEIGHT; j++)
+            for (int x = 0; x < Clusterbyte.GRID_WIDTH; x++)
             {
-                // Use Perlin noise to spawn procedurally
-                // This will ensure that the terrain is not too clustered
-                bool shouldSpawn = Mathf.PerlinNoise(i * Random.value, j * Random.value) > 0.5f;
-                if (!shouldSpawn)
+                // Query the level selector for terrain generation
+                // level -> y (row) -> x (column)
+                int terrainId = Clusterbyte.LEVELS_TERRAIN[level][y][x];
+                // This is an empty cell, skip
+                if (terrainId == 0)
                     continue;
-                EntityFactory.Get<Terrain>().SpawnAtGrid(i, j);
-                terrain.Add(Clusterbyte.ConvertTo3D(new Vector2(i, j)));
+                // Placeable terrain has id=2, inactive terrain has id=1
+                Entity.Entity toSpawn = terrainId == 2 ? EntityFactory.Get<PlaceableTerrain>() : EntityFactory.Get<InactiveTerrain>();
+                // Spawn the terrain prefab at the grid cell
+                // The grid is flipped in the y-axis on the Unity plane, so inversion is required
+                float invertedY = Clusterbyte.GRID_HEIGHT - y;
+                GameObject spawned = toSpawn.SpawnAtGrid(x, invertedY);
+                // Must also manage the list of terrain objects that the user can place on for validation
+                if (terrainId == 2)
+                    placeableTerrain.Add(spawned);
             }
         }
     }
@@ -52,7 +63,7 @@ public class GameManager : StateManager
 
     public bool IsTerrain(Vector3 position)
     {
-        return terrain.Contains(position);
+        return placeableTerrain.Any(t => Clusterbyte.ConvertTo2D(t.transform.position) == Clusterbyte.ConvertTo2D(position));
     }
 
     public void BuyItem(string itemName)
@@ -90,15 +101,20 @@ public class GameManager : StateManager
         EDITING = new GameState(EditingInit, EditingPeriodic, EditingEnd);
         ACTIVE = new GameState(ActiveInit, ActivePeriodic, ActiveEnd);
 
-        // TODO: states for on game done for new field stuff
-        RegenerateField();
-
+        // Returns to overview setting at default or ESC
         SetState(SETTING);
-        ChangeStateOnEvent(() => state == SETTING && Input.GetMouseButtonDown(0) && mouseHover.isHovering && IsOccupied(mouseHover.hoveredPosition), EDITING);
-        // TODO: Setting Mode
-        // ChangeStateOnEvent(() => state == OBSERVING && Input.GetKeyDown(KeyCode.Escape), SETTING);
-        // ChangeStateOnEvent(() => state == EDITING && Input.GetKeyDown(KeyCode.Escape), SETTING);
+        ChangeStateOnEvent(() => state == OBSERVING && Input.GetKeyDown(KeyCode.Escape), SETTING);
+        ChangeStateOnEvent(() => state == EDITING && Input.GetKeyDown(KeyCode.Escape), SETTING);
+
+        // On click of terrain during overview setting, switch to observing states
+        // ChangeStateOnEvent(() => state == SETTING && Input.GetMouseButtonDown(0) && mouseHover.isHovering && IsOccupied(mouseHover.hoveredPosition), EDITING);
         ChangeStateOnEvent(() => state == SETTING && Input.GetMouseButtonDown(0) && mouseHover.isHovering, OBSERVING);
+    }
+
+    internal void Start()
+    {
+        // TODO: states for on game done for new field stuff
+        ParseCurrentLevelMap();
     }
 
     private void SettingInit()

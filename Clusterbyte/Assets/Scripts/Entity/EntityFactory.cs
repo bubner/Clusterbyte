@@ -6,13 +6,15 @@ namespace Entity
     public class EntityFactory : MonoBehaviour
     {
         [SerializeField] private GameObject turretPrefab;
-        [SerializeField] private GameObject terrainPrefab;
+        [SerializeField] private GameObject placeableTerrainPrefab;
+        [SerializeField] private GameObject deadTerrainPrefab;
 
         private static readonly List<Entity> entities = new();
 
         internal void Awake()
         {
-            entities.Add(new Terrain(terrainPrefab));
+            entities.Add(new PlaceableTerrain(placeableTerrainPrefab));
+            entities.Add(new InactiveTerrain(deadTerrainPrefab));
             entities.Add(new ShopDeployable("Turret", turretPrefab, 5));
         }
         
