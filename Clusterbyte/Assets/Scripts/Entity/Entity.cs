@@ -16,7 +16,11 @@ namespace Entity
 
         public GameObject SpawnAtGrid(float x, float y)
         {
-            return Object.Instantiate(prefab, new Vector3(x, 0.5f, y), Quaternion.identity);
+            GameObject o = Object.Instantiate(prefab, new Vector3(x, 0.5f, y), Quaternion.identity);
+            OnSpawn(o);
+            return o;
         }
+
+        protected virtual void OnSpawn(GameObject spawnedObject) { }
     }
 }

@@ -13,9 +13,9 @@ namespace Viewport
 
         public enum CameraSpot
         {
-            SETTING,
-            ACTIVE,
-            OBSERVING
+            ANGLED,
+            OVERHEAD,
+            CUSTOM
         }
 
         public void SetObservingSpot(Vector3 pos, Quaternion rot)
@@ -36,7 +36,7 @@ namespace Viewport
         public void SetPosition(CameraSpot spot)
         {
             // Observing spot must be set first
-            if (spot == CameraSpot.OBSERVING && observingSpot == null)
+            if (spot == CameraSpot.CUSTOM && observingSpot == null)
             {
                 Debug.LogError("Observing spot must be set first before setting the camera to observe it.");
                 return;
@@ -49,9 +49,9 @@ namespace Viewport
         {
             Transform spot = currentState switch
             {
-                CameraSpot.SETTING => settingSpot,
-                CameraSpot.ACTIVE => activeSpot,
-                CameraSpot.OBSERVING => observingSpot,
+                CameraSpot.ANGLED => settingSpot,
+                CameraSpot.OVERHEAD => activeSpot,
+                CameraSpot.CUSTOM => observingSpot,
                 _ => throw new ArgumentOutOfRangeException()
             };
             transform.position = Vector3.Lerp(transform.position, spot.position, Time.deltaTime * interpolateSpeed);

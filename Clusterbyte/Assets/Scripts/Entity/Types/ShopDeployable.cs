@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Entity
+namespace Entity.Types
 {
     public class ShopDeployable : Entity
     {

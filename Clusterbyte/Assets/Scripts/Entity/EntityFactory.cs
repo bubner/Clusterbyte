@@ -1,4 +1,7 @@
 using System.Collections.Generic;
+using Entity.Enemy;
+using Entity.Markers;
+using Entity.Types;
 using UnityEngine;
 
 namespace Entity
@@ -8,14 +11,20 @@ namespace Entity
         [SerializeField] private GameObject turretPrefab;
         [SerializeField] private GameObject placeableTerrainPrefab;
         [SerializeField] private GameObject deadTerrainPrefab;
+        [SerializeField] private GameObject genericMarkerPrefab;
+        [SerializeField] private GameObject blobPrefab;
 
         private static readonly List<Entity> entities = new();
 
         internal void Awake()
         {
-            entities.Add(new PlaceableTerrain(placeableTerrainPrefab));
-            entities.Add(new InactiveTerrain(deadTerrainPrefab));
+            entities.Add(new MapElement("Dead", deadTerrainPrefab));
+            entities.Add(new MapElement("Placeable", placeableTerrainPrefab));
+            entities.Add(new StartMarker(genericMarkerPrefab));
+            entities.Add(new EndMarker(genericMarkerPrefab));
+
             entities.Add(new ShopDeployable("Turret", turretPrefab, 5));
+            entities.Add(new Mazeable("Blob", blobPrefab));
         }
         
         public static T Get<T>(string entityName) where T : Entity

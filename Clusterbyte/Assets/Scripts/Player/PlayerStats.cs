@@ -8,13 +8,18 @@ namespace Player
     {
         [SerializeField] private GameObject hud;
         [SerializeField] private TextMeshProUGUI tokenText;
+        [SerializeField] private TextMeshProUGUI lifeText;
 
         public int startingTokens = 5;
-        public int tokens { get; private set; }
+        public int startingLives = 20;
 
-        public void ResetTokens()
+        public int tokens { get; private set; }
+        public int lives { get; private set; }
+
+        public void ResetStats()
         {
             tokens = startingTokens;
+            lives = startingLives;
         }
 
         public bool TryTransaction(int amount)
@@ -28,24 +33,30 @@ namespace Player
             return true;
         }
 
+        public void LoseLife()
+        {
+            lives--;
+        }
+
         public void AddTokens(int amount)
         {
             tokens += amount;
         }
 
-        internal override void Hide()
+        public override void Hide()
         {
             hud.SetActive(false);
         }
 
-        internal override void Show()
+        public override void Show()
         {
             hud.SetActive(true);
         }
 
         internal void Update()
         {
-            tokenText.text = tokens.ToString();
+            tokenText.text = tokens + " tokens";
+            lifeText.text = lives + " lives";
         }
     }
 }

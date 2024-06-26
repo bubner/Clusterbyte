@@ -10,11 +10,17 @@ namespace Lib
         /// <summary>
         /// Called when this UI element should stop rendering.
         /// </summary>
-        internal abstract void Hide();
+        public virtual void Hide()
+        {
+            gameObject.SetActive(false);
+        }
 
         /// <summary>
         /// Called when this UI element should start rendering.
         /// </summary>
-        internal abstract void Show();
+        public virtual void Show()
+        {
+            gameObject.SetActive(true);
+        }
     }
 }

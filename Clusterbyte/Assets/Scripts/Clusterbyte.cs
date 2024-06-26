@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,12 +16,13 @@ public static class Clusterbyte
 
     public const int GRID_WIDTH = 18;
     public const int GRID_HEIGHT = 10;
+    public const float END_OF_PATH_TRIGGER_BOX_THRESHOLD = 0.5f;
 
     public static readonly int[][][] LEVELS_TERRAIN =
     {
         new []
         {
-            new [] { 1, 1, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1 },
+            new [] { 1, 1, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4, 1 },
             new [] { 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1 },
             new [] { 1, 0, 2, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 1 },
             new [] { 1, 0, 1, 1, 1, 0, 2, 1, 1, 1, 0, 1, 0, 2, 1, 1, 0, 1 },
@@ -29,7 +31,16 @@ public static class Clusterbyte
             new [] { 1, 0, 2, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1 },
             new [] { 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 2, 2, 1, 0, 1 },
             new [] { 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1 },
-            new [] { 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+            new [] { 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
         }
+    };
+
+    public static readonly Tuple<float, string>[][] ENEMY_SPAWN_TIMES =
+    {
+        new[]
+        {
+            new Tuple<float, string>(0.1f, "Blob"),
+            new Tuple<float, string>(1f, "Blob")
+        },
     };
 }

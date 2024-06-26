@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Lib
@@ -19,21 +21,23 @@ namespace Lib
         /// </summary>
         protected delegate bool GameStateChangeCriteria();
 
-        private readonly ArrayList stateChanges = new();
+        private readonly List<Tuple<GameStateChangeCriteria, GameState>> stateChanges = new();
         private GameState previousState;
+        private bool initCall;
 
         internal void Update()
         {
             if (Input.GetKeyUp(KeyCode.Escape))
             {
+                // TODO
                 Application.Quit();
             }
 
             // Run all criteria checks for state changes
-            foreach (StateChange sc in stateChanges)
+            foreach (Tuple<GameStateChangeCriteria, GameState> sc in
+                     stateChanges.Where(sc => sc.Item1()))
             {
-                if (!sc.Criteria()) continue;
-                state = sc.NextState;
+                state = sc.Item2;
                 break;
             }
 
@@ -60,7 +64,7 @@ namespace Lib
         /// <param name="nextState">the new state to change to when the criteria is met</param>
         protected void ChangeStateOnEvent(GameStateChangeCriteria criteria, GameState nextState)
         {
-            stateChanges.Add(new StateChange(criteria, nextState));
+            stateChanges.Add(new Tuple<GameStateChangeCriteria, GameState>(criteria, nextState));
         }
 
         /// <summary>
@@ -69,22 +73,10 @@ namespace Lib
         /// <param name="newState">the state to execute now</param>
         public void SetState(GameState newState)
         {
+            if (state == null)
+                newState.OnStart();
             state = newState;
-            state.OnStart();
             previousState ??= newState;
-        }
-
-        // Represents a pair of objects being the delegate and next state
-        private class StateChange
-        {
-            public GameStateChangeCriteria Criteria { get; }
-            public GameState NextState { get; }
-
-            public StateChange(GameStateChangeCriteria criteria, GameState nextState)
-            {
-                Criteria = criteria;
-                NextState = nextState;
-            }
         }
     }
 }
