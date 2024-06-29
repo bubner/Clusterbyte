@@ -40,6 +40,11 @@ namespace Entity.Placeables.Turret
                 // Calculate damage based on distance from the explosion
                 float damage = CalculateDamage(hit.transform.position);
                 Debug.Log("Applying damage to " + hit.gameObject.name + " with " + damage + " damage.");
+
+                if (hit.gameObject.TryGetComponent(out Health health))
+                {
+                    health.TakeDamage(damage);
+                }
             }
 
             // Unparent particles from the shell
