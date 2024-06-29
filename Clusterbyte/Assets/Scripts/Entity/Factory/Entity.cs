@@ -1,18 +1,17 @@
-
 using UnityEngine;
 
-namespace Entity
+namespace Entity.Factory
 {
     public abstract class Entity
     {
-        public GameObject prefab { get; }
-        public string name { get; private set; }
-
         protected Entity(string name, GameObject prefab)
         {
             this.name = name;
             this.prefab = prefab;
         }
+
+        public GameObject prefab { get; }
+        public string name { get; private set; }
 
         public GameObject SpawnAtGrid(float x, float y)
         {
@@ -21,6 +20,8 @@ namespace Entity
             return o;
         }
 
-        protected virtual void OnSpawn(GameObject spawnedObject) { }
+        protected virtual void OnSpawn(GameObject spawnedObject)
+        {
+        }
     }
 }

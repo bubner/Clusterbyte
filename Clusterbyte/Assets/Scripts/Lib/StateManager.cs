@@ -27,12 +27,6 @@ namespace Lib
 
         internal void Update()
         {
-            if (Input.GetKeyUp(KeyCode.Escape))
-            {
-                // TODO
-                Application.Quit();
-            }
-
             // Run all criteria checks for state changes
             foreach (Tuple<GameStateChangeCriteria, GameState> sc in
                      stateChanges.Where(sc => sc.Item1()))

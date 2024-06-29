@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Entity.Placeables.Turret
+namespace Entity.Behaviours.Placeables.Turret
 {
     public class Turret : MonoBehaviour
     {

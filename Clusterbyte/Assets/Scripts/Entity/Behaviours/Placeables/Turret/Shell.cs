@@ -1,6 +1,7 @@
+using Entity.Behaviours.Enemy;
 using UnityEngine;
 
-namespace Entity.Placeables.Turret
+namespace Entity.Behaviours.Placeables.Turret
 {
     /// <summary>
     /// A bullet or shell that is instantiated upon every firing of a turret.
@@ -24,7 +25,8 @@ namespace Entity.Placeables.Turret
 
         internal void OnCollisionEnter(Collision other)
         {
-            if (!other.gameObject.CompareTag("Enemy") && !other.gameObject.CompareTag("PlayingField") && !other.gameObject.CompareTag("Terrain"))
+            if (!other.gameObject.CompareTag("Enemy") && !other.gameObject.CompareTag("PlayingField") &&
+                !other.gameObject.CompareTag("Terrain"))
                 return;
 
             // We only want to activate the shell once
@@ -32,6 +34,7 @@ namespace Entity.Placeables.Turret
             hasActivated = true;
 
             // Make an explosive sphere
+            // TODO: Use nonAlloc
             Collider[] colliders = Physics.OverlapSphere(transform.position, explosionRadius);
             foreach (Collider hit in colliders)
             {
@@ -42,9 +45,7 @@ namespace Entity.Placeables.Turret
                 Debug.Log("Applying damage to " + hit.gameObject.name + " with " + damage + " damage.");
 
                 if (hit.gameObject.TryGetComponent(out Health health))
-                {
                     health.TakeDamage(damage);
-                }
             }
 
             // Unparent particles from the shell

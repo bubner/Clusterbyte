@@ -3,8 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Entity;
-using Entity.Markers;
-using Entity.Types;
+using Entity.Factory;
+using Entity.Factory.Markers;
+using Entity.Factory.Types;
 using Lib;
 using Player;
 using TMPro;
@@ -33,6 +34,7 @@ public class GameManager : StateManager
     private readonly List<GameObject> placeableTerrain = new();
     private readonly List<GameObject> deployed = new();
     private readonly List<Vector2> takenPositions = new();
+    private GameObject[] viewingWaveEnemies;
 
     public static GameState VIEWING;
     public static GameState SHOPPING;
@@ -56,7 +58,7 @@ public class GameManager : StateManager
                 if (terrainId == 0)
                     continue;
                 // Placeable terrain has id=2, inactive terrain has id=1, start has id=3, end has id=4
-                Entity.Entity toSpawn = terrainId switch
+                Entity.Factory.Entity toSpawn = terrainId switch
                 {
                     1 => EntityFactory.Get<MapElement>("Dead"),
                     2 => EntityFactory.Get<MapElement>("Placeable"),
@@ -160,9 +162,11 @@ public class GameManager : StateManager
     {
         yield return new WaitForSeconds(0.5f);
         // Send as many waves as there are enemies that will spawn in this level
-        for (int i = 0; i < Clusterbyte.ENEMY_SPAWN_TIMES[level].Length; i++)
+        int enemies = Clusterbyte.ENEMY_SPAWN_TIMES[level].Length;
+        viewingWaveEnemies = new GameObject[enemies];
+        for (int i = 0; i < enemies; i++)
         {
-            Instantiate(navIndicatorPrefab, entitySpawn.transform.position, Quaternion.identity);
+            viewingWaveEnemies[i] = Instantiate(navIndicatorPrefab, entitySpawn.transform.position, Quaternion.identity);
             yield return new WaitForSeconds(0.2f);
         }
     }
@@ -228,14 +232,20 @@ public class GameManager : StateManager
         Tuple<float, string>[] wave = Clusterbyte.ENEMY_SPAWN_TIMES[currentLevel];
         foreach (Tuple<float, string> timePair in wave)
         {
-            if (!EntityFactory.TryGet(timePair.Item2, out Entity.Entity e))
+            if (!EntityFactory.TryGet(timePair.Item2, out Entity.Factory.Entity e))
                 continue;
 
             StartCoroutine(SpawnIn(timePair.Item1, e));
         }
+
+        foreach (GameObject viewingMarker in viewingWaveEnemies)
+        {
+            if (viewingMarker != null)
+                Destroy(viewingMarker);
+        }
     }
 
-    private IEnumerator SpawnIn(float seconds, Entity.Entity toSpawn)
+    private IEnumerator SpawnIn(float seconds, Entity.Factory.Entity toSpawn)
     {
         yield return new WaitForSeconds(seconds);
         Vector2 spawnPosition = Clusterbyte.ConvertTo2D(entitySpawn.transform.position);

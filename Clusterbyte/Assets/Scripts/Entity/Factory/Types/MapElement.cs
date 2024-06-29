@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Entity.Types
+namespace Entity.Factory.Types
 {
     public class MapElement : Entity
     {

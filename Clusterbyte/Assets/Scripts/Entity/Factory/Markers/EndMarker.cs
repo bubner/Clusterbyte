@@ -1,7 +1,7 @@
-using Entity.Types;
+using Entity.Factory.Types;
 using UnityEngine;
 
-namespace Entity.Markers
+namespace Entity.Factory.Markers
 {
     public class EndMarker : MapElement
     {

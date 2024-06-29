@@ -985,6 +985,7 @@ MonoBehaviour:
   deadTerrainPrefab: {fileID: 1065103620393454603, guid: ebabd6ef64e84fce8ac403d842c70c9c, type: 3}
   genericMarkerPrefab: {fileID: 5810786740800602072, guid: 9be079a3d3b25de94a08d490c92f7368, type: 3}
   blobPrefab: {fileID: 7472470767290072033, guid: 6e572bdea16570384a99533cefab89a2, type: 3}
+  followingHpBarPrefab: {fileID: 1931917306570035837, guid: 39499e71254aa68b28816f96848fdd28, type: 3}
 --- !u!1 &1090456153
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,6 +1,7 @@
+using Entity.Behaviours.Enemy;
 using UnityEngine;
 
-namespace Entity.Enemy
+namespace Entity.Factory.Enemy
 {
     public class Mazeable : Entity
     {

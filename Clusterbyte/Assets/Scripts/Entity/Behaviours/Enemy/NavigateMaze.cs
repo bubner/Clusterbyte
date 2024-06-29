@@ -1,9 +1,7 @@
-using System;
-using Lib;
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace Entity.Enemy
+namespace Entity.Behaviours.Enemy
 {
     /// <summary>
     /// A generic enemy that tries to move towards the end of the path.

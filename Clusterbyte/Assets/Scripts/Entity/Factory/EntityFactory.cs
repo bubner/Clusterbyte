@@ -1,20 +1,20 @@
 using System.Collections.Generic;
-using Entity.Enemy;
-using Entity.Markers;
-using Entity.Types;
+using Entity.Factory.Enemy;
+using Entity.Factory.Markers;
+using Entity.Factory.Types;
 using UnityEngine;
 
-namespace Entity
+namespace Entity.Factory
 {
     public class EntityFactory : MonoBehaviour
     {
+        private static readonly List<Entity> entities = new();
         [SerializeField] private GameObject turretPrefab;
         [SerializeField] private GameObject placeableTerrainPrefab;
         [SerializeField] private GameObject deadTerrainPrefab;
         [SerializeField] private GameObject genericMarkerPrefab;
         [SerializeField] private GameObject blobPrefab;
-
-        private static readonly List<Entity> entities = new();
+        [SerializeField] private GameObject followingHpBarPrefab;
 
         internal void Awake()
         {
@@ -22,11 +22,12 @@ namespace Entity
             entities.Add(new MapElement("Placeable", placeableTerrainPrefab));
             entities.Add(new StartMarker(genericMarkerPrefab));
             entities.Add(new EndMarker(genericMarkerPrefab));
+            entities.Add(new HPBar(followingHpBarPrefab));
 
             entities.Add(new ShopDeployable("Turret", turretPrefab, 5));
             entities.Add(new Mazeable("Blob", blobPrefab));
         }
-        
+
         public static T Get<T>(string entityName) where T : Entity
         {
             Entity entity = entities.Find(entity => entity.name == entityName);
@@ -44,7 +45,7 @@ namespace Entity
             Debug.LogError("Entity not found.");
             return null;
         }
-        
+
         public static bool TryGet<T>(out Entity obj)
         {
             Entity entity = entities.Find(entity => entity.GetType() == typeof(T));
@@ -53,11 +54,12 @@ namespace Entity
                 obj = entity;
                 return true;
             }
+
             Debug.LogError("Entity not found.");
             obj = null;
             return false;
         }
-        
+
         public static bool TryGet<T>(string entityName, out T obj) where T : Entity
         {
             Entity entity = entities.Find(entity => entity.name == entityName);
@@ -66,6 +68,7 @@ namespace Entity
                 obj = e;
                 return true;
             }
+
             Debug.LogError($"Entity {entityName} not found or not of the expected type.");
             obj = null;
             return false;

@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-namespace Entity.Placeables
+namespace Entity.Behaviours.Placeables
 {
     public class AutoLockKinematics : MonoBehaviour
     {

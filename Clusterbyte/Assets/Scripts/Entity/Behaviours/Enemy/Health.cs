@@ -1,16 +1,15 @@
-using Lib;
 using UnityEngine;
 
-namespace Entity
+namespace Entity.Behaviours.Enemy
 {
-    public class Health : UIExtensible
+    public class Health : MonoBehaviour
     {
-        [SerializeField] private float startingHealth = 100f;
+        public float startingHealth = 100f;
         public float health { get; private set; }
 
-        public float GetHealthRatio01()
+        internal void Awake()
         {
-            return health / startingHealth;
+            ResetHealth();
         }
 
         public void ResetHealth()
