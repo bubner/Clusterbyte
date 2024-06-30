@@ -179,7 +179,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxDamage: 34
   explosionRadius: 2
-  maxLifeTime: 2
+  maxLifeTime: 4
   explosionParticles: {fileID: 1129092160483011706}
   fireSound: {fileID: 6932011920785352569}
 --- !u!54 &-1363451410207716737

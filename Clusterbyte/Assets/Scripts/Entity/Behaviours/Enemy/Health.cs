@@ -2,6 +2,9 @@ using UnityEngine;
 
 namespace Entity.Behaviours.Enemy
 {
+    /// <summary>
+    /// Represents an enemy that will destroy itself when its health reaches zero.
+    /// </summary>
     public class Health : MonoBehaviour
     {
         public float startingHealth = 100f;
@@ -9,30 +12,14 @@ namespace Entity.Behaviours.Enemy
 
         internal void Awake()
         {
-            ResetHealth();
-        }
-
-        public void ResetHealth()
-        {
             health = startingHealth;
         }
 
-        public void TakeDamage(float damage)
+        public void TakeDamage(float amount)
         {
-            if (health - damage >= 0)
-                health -= damage;
-        }
-
-        public bool TryTakeDamage(float damage)
-        {
-            if (health - damage >= 0)
-                health -= damage;
-            return health <= 0;
-        }
-
-        public bool IsDead()
-        {
-            return health <= 0;
+            health -= amount;
+            if (health <= 0)
+                Destroy(gameObject);
         }
     }
 }

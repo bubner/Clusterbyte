@@ -17,6 +17,12 @@ namespace Entity.Behaviours.Placeables.Turret
 
         private bool hasActivated;
 
+        internal void Awake()
+        {
+            if (fireSound.clip.length > maxLifeTime)
+                Debug.LogWarning("SFX for shell explosion is longer than the max lifetime of the shell. This may cause unwanted clipping.");
+        }
+
         internal void Start()
         {
             Destroy(gameObject, maxLifeTime);
@@ -42,7 +48,7 @@ namespace Entity.Behaviours.Placeables.Turret
                     continue;
                 // Calculate damage based on distance from the explosion
                 float damage = CalculateDamage(hit.transform.position);
-                Debug.Log("Applying damage to " + hit.gameObject.name + " with " + damage + " damage.");
+                // Debug.Log("Applying damage to " + hit.gameObject.name + " with " + damage + " damage.");
 
                 if (hit.gameObject.TryGetComponent(out Health health))
                     health.TakeDamage(damage);
@@ -55,7 +61,8 @@ namespace Entity.Behaviours.Placeables.Turret
             // Remove particles once they are completed
             Destroy(explosionParticles.gameObject, explosionParticles.main.duration);
 
-            // // Stop rendering and performing physics on the shell but keep it alive long enough to play the SFX
+            // Stop rendering and performing physics on the shell but keep it alive long enough to play the SFX
+            // Might be a future task to integrate the SFX into the particle system/as a separate GameObject
             Destroy(GetComponent<Renderer>());
             Destroy(GetComponent<Collider>());
             Destroy(gameObject, fireSound.clip.length - fireSound.time);

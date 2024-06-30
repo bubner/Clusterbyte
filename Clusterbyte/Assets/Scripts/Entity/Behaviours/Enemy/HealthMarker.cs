@@ -7,38 +7,47 @@ using UnityEngine.UI;
 
 namespace Entity.Behaviours.Enemy
 {
+    /// <summary>
+    /// Following Canvas element that displays the health of an entity.
+    /// </summary>
     public class HealthMarker : UIExtensible
     {
         [SerializeField] private Health health;
-        private Camera cam;
-        private RectTransform translation;
+        private GameObject obj;
+        private Image background;
         private Slider bar;
         private TextMeshProUGUI text;
 
         internal void Start()
         {
-            cam = Camera.main;
-            GameObject obj = Instantiate(EntityFactory.Get<HPBar>().prefab, transform);
+            // Create a new child of the current GameObject to be the health marker
+            obj = Instantiate(EntityFactory.Get<HPBar>().prefab, transform);
+
             bar = obj.GetComponentInChildren<Slider>();
+            background = bar.GetComponentsInChildren<Image>()[1];
             text = obj.GetComponentInChildren<TextMeshProUGUI>();
-            translation = obj.GetComponentInChildren<RectTransform>();
         }
 
         internal void Update()
         {
+            // Health display
             text.text = $"{health.health:F0}/{health.startingHealth}";
             bar.value = health.health / health.startingHealth;
-            // TODO: positioning of the health bar
+            background.color = Color.Lerp(Color.red, Color.green, bar.value);
+
+            // Position slightly above the enemy and rotate it upwards for the camera to see
+            obj.transform.position = transform.position + Vector3.up * 2;
+            obj.transform.rotation = Quaternion.Euler(90, 0, 0);
         }
 
         public override void Show()
         {
-            bar.gameObject.SetActive(true);
+            obj.SetActive(true);
         }
 
         public override void Hide()
         {
-            bar.gameObject.SetActive(false);
+            obj.SetActive(false);
         }
     }
 }

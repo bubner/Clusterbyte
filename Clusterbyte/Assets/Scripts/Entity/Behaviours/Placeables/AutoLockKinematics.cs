@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace Entity.Behaviours.Placeables
 {
+    /// <summary>
+    /// Helper script attached to placeables that locks their kinematic state after a short delay.
+    /// </summary>
     public class AutoLockKinematics : MonoBehaviour
     {
         private Rigidbody rb;

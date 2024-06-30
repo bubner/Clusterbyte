@@ -25,9 +25,9 @@ namespace Lib
         /// <param name="onEnd">Will be called once when this state is removed or replaced.</param>
         public GameState(Action onStart, Action periodic, Action onEnd)
         {
-            OnStart = onStart;
-            Periodic = periodic;
-            OnEnd = onEnd;
+            OnStart = onStart ?? (() => { });
+            Periodic = periodic ?? (() => { });
+            OnEnd = onEnd ?? (() => { });
         }
         
         public override string ToString()

@@ -67,10 +67,17 @@ namespace Lib
         /// <param name="newState">the state to execute now</param>
         public void SetState(GameState newState)
         {
-            if (state == null)
-                newState.OnStart();
+            newState.OnStart();
             state = newState;
-            previousState ??= newState;
+            if (previousState == null)
+            {
+                Debug.Log($"State set to {state}.");
+                previousState = newState;
+                return;
+            }
+            Debug.Log($"State changed from {previousState} to {state}.");
+            previousState.OnEnd();
+            previousState = newState;
         }
     }
 }

@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace Player
 {
+    /// <summary>
+    /// Token and life tracking for the player.
+    /// </summary>
     public class PlayerStats : UIExtensible
     {
         [SerializeField] private GameObject hud;
@@ -16,12 +19,20 @@ namespace Player
         public int tokens { get; private set; }
         public int lives { get; private set; }
 
+        /// <summary>
+        /// Reset the player's stats to their starting values.
+        /// </summary>
         public void ResetStats()
         {
             tokens = startingTokens;
             lives = startingLives;
         }
 
+        /// <summary>
+        /// Attempt to buy something with the player's tokens.
+        /// </summary>
+        /// <param name="amount">The amount that should be deducted</param>
+        /// <returns>Whether the transaction was successful</returns>
         public bool TryTransaction(int amount)
         {
             if (tokens - amount < 0)
@@ -33,11 +44,18 @@ namespace Player
             return true;
         }
 
+        /// <summary>
+        /// Remove a life from the player.
+        /// </summary>
         public void LoseLife()
         {
             lives--;
         }
 
+        /// <summary>
+        /// Add tokens to the player's inventory.
+        /// </summary>
+        /// <param name="amount">The amount to add</param>
         public void AddTokens(int amount)
         {
             tokens += amount;
@@ -55,8 +73,8 @@ namespace Player
 
         internal void Update()
         {
-            tokenText.text = tokens + " tokens";
-            lifeText.text = lives + " lives";
+            tokenText.text = "Tokens: " + tokens;
+            lifeText.text = "Lives: " + lives;
         }
     }
 }

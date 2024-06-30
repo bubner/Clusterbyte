@@ -3,6 +3,9 @@ using UnityEngine.SceneManagement;
 
 namespace MainMenu
 {
+    /// <summary>
+    /// Clusterbyte Main menu button handlers.
+    /// </summary>
     public class MenuButtons : MonoBehaviour
     {
         public void OnPlayButtonClicked()

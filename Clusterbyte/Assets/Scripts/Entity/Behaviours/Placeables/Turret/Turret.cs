@@ -2,6 +2,9 @@ using UnityEngine;
 
 namespace Entity.Behaviours.Placeables.Turret
 {
+    /// <summary>
+    /// Auto-aiming turret that fires shells at enemies.
+    /// </summary>
     public class Turret : MonoBehaviour
     {
         public float fireTime = 1f;
@@ -19,12 +22,13 @@ namespace Entity.Behaviours.Placeables.Turret
         {
             if (!target)
             {
+                // If there's nothing to shoot, rotate in place to simulate looking for enemies
                 head.rotation = Quaternion.Euler(0, head.rotation.eulerAngles.y, 0);
                 head.Rotate(Vector3.up, 30 * Time.deltaTime);
                 return;
             }
 
-            // Check if the turret is too far away
+            // Check if the turret is too far away from the enemy
             if (Vector3.Distance(transform.position, target.transform.position) > radius)
             {
                 target = null;
@@ -33,6 +37,7 @@ namespace Entity.Behaviours.Placeables.Turret
 
             head.LookAt(target.transform);
 
+            // Only fire once every fireTime seconds
             timer -= Time.deltaTime;
             if (timer > 0)
                 return;
@@ -45,6 +50,7 @@ namespace Entity.Behaviours.Placeables.Turret
 
         internal void OnTriggerStay(Collider other)
         {
+            // Only lock onto one enemy at a time
             if (!other.CompareTag("Enemy") || (target != null && other.gameObject != target))
                 return;
             target = other.gameObject;

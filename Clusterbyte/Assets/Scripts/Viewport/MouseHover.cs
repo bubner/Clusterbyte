@@ -1,8 +1,10 @@
-using System;
 using UnityEngine;
 
 namespace Viewport
 {
+    /// <summary>
+    /// Handles the box hover effect of the mouse on the grid.
+    /// </summary>
     public class MouseHover : MonoBehaviour
     {
         [SerializeField] private Camera mainCamera;
@@ -59,7 +61,7 @@ namespace Viewport
                 meshRenderer.material.color = new Color(1f, 1f, 0, 0.4f);
                 return;
             }
-            if (mgr.IsTerrain(hoveredPosition))
+            if (mgr.IsPlaceable(hoveredPosition))
             {
                 meshRenderer.material.color = new Color(0, 1f, 0, 0.4f);
                 return;
