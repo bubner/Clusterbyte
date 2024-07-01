@@ -52,6 +52,7 @@ public class GameManager : StateManager
     private readonly List<GameObject> deployed = new();
     private readonly List<Vector2> takenPositions = new();
     private readonly List<GameObject> enemies = new();
+    private readonly List<Coroutine> waveCoroutines = new();
     private GameObject[] viewingWaveEnemies;
 
     /// <summary>
@@ -279,7 +280,7 @@ public class GameManager : StateManager
                 continue;
 
             // Queue the spawning of this entity
-            StartCoroutine(SpawnIn(timePair.Item1, e));
+            waveCoroutines.Add(StartCoroutine(SpawnIn(timePair.Item1, e)));
         }
 
         // Remove any viewing markers that have not been destroyed by the end of the wave
@@ -321,12 +322,18 @@ public class GameManager : StateManager
 
     private void ActiveEnd()
     {
+        // Halt all waves
+        foreach (Coroutine waveCoroutine in waveCoroutines)
+            StopCoroutine(waveCoroutine);
+
         // Remove all extra enemies from the field
         enemies.ForEach(e =>
         {
             if (e != null) Destroy(e);
         });
+
         enemies.Clear();
+        waveCoroutines.Clear();
     }
 
     private void TempExitHandler()
