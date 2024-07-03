@@ -32,10 +32,11 @@ namespace Entity.Factory
         /// </summary>
         /// <param name="x">x (horizontal) component</param>
         /// <param name="y">y (vertical) component</param>
+        /// <param name="parent">Optional parent for this entity when spawning</param>
         /// <returns></returns>
-        public GameObject InstantiateAtGrid(float x, float y)
+        public GameObject InstantiateAtGrid(float x, float y, Transform parent = null)
         {
-            return Instantiate(new Vector3(x, 0.5f, y), Quaternion.identity);
+            return Instantiate(new Vector3(x, 0.5f, y), Quaternion.identity, parent);
         }
 
         /// <summary>
@@ -43,10 +44,13 @@ namespace Entity.Factory
         /// </summary>
         /// <param name="position">the position to instantiate</param>
         /// <param name="rotation">the rotation to give the instantiated object</param>
+        /// <param name="parent">Optional parent for this entity when spawning</param>
         /// <returns></returns>
-        public GameObject Instantiate(Vector3 position, Quaternion rotation)
+        public GameObject Instantiate(Vector3 position, Quaternion rotation, Transform parent = null)
         {
-            GameObject o = Object.Instantiate(prefab, position, rotation);
+            GameObject o = parent
+                ? Object.Instantiate(prefab, position, rotation, parent)
+                : Object.Instantiate(prefab, position, rotation);
             instance = o;
             OnSpawn(o);
             return o;

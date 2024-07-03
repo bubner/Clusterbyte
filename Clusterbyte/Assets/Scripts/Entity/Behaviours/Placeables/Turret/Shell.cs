@@ -40,17 +40,17 @@ namespace Entity.Behaviours.Placeables.Turret
             hasActivated = true;
 
             // Make an explosive sphere
-            // TODO: Use nonAlloc
-            Collider[] colliders = Physics.OverlapSphere(transform.position, explosionRadius);
-            foreach (Collider hit in colliders)
+            Collider[] colliders = new Collider[30];
+            int size = Physics.OverlapSphereNonAlloc(transform.position, explosionRadius, colliders);
+            for (int i = 0; i < size; i++)
             {
-                if (!hit.gameObject.CompareTag("Enemy"))
+                if (!colliders[i].gameObject.CompareTag("Enemy"))
                     continue;
                 // Calculate damage based on distance from the explosion
-                float damage = CalculateDamage(hit.transform.position);
+                float damage = CalculateDamage(colliders[i].transform.position);
                 // Debug.Log("Applying damage to " + hit.gameObject.name + " with " + damage + " damage.");
 
-                if (hit.gameObject.TryGetComponent(out Health health))
+                if (colliders[i].gameObject.TryGetComponent(out Health health))
                     health.TakeDamage(damage);
             }
 

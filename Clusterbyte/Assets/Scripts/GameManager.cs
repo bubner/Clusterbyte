@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Entity.Factory;
-using Entity.Factory.Markers;
+using Entity.Factory.Info;
 using Entity.Factory.Types;
 using Lib;
 using Player;
@@ -156,12 +156,12 @@ public class GameManager : StateManager
         // Check illegal states
         if (IsOccupied(mouseHover.hoveredPosition))
         {
-            Debug.Log("Cannot place item on an occupied tile.");
+            SendAlert("Position is already occupied.", Popup.Type.WARNING);
             return;
         }
         if (!EntityFactory.TryGet(itemName, out ShopDeployable item))
         {
-            Debug.LogError($"Item {itemName} does not exist.");
+            SendAlert($"Item {itemName} does not exist.", Popup.Type.ERROR);
             return;
         }
 
@@ -169,15 +169,14 @@ public class GameManager : StateManager
         Vector3 position = mouseHover.hoveredPosition;
         if (playerStats.TryTransaction(item.cost))
         {
-            Debug.Log($"Bought {itemName} for {item.cost} tokens.");
+            SendAlert($"Bought {itemName} for {item.cost} tokens.");
             deployed.Add(Instantiate(item.prefab, position + new Vector3(0, 2, 0), Quaternion.identity));
             takenPositions.Add(Clusterbyte.ConvertTo2D(position));
             SetState(VIEWING);
         }
         else
         {
-            // TODO: Add a UI element to show this message
-            Debug.Log("Not enough tokens to buy this item.");
+            SendAlert("Not enough tokens.", Popup.Type.WARNING);
         }
     }
 
@@ -214,13 +213,18 @@ public class GameManager : StateManager
     {
         yield return new WaitForSeconds(0.5f);
         // Send as many waves as there are enemies that will spawn in this level
-        int enemies = Clusterbyte.ENEMY_SPAWN_TIMES[level].Length;
-        viewingWaveEnemies = new GameObject[enemies];
-        for (int i = 0; i < enemies; i++)
+        int enemySpawnCount = Clusterbyte.ENEMY_SPAWN_TIMES[level].Length;
+        viewingWaveEnemies = new GameObject[enemySpawnCount];
+        for (int i = 0; i < enemySpawnCount; i++)
         {
             viewingWaveEnemies[i] = Instantiate(navIndicatorPrefab, entitySpawn.transform.position, Quaternion.identity);
             yield return new WaitForSeconds(0.2f);
         }
+    }
+
+    private void SendAlert(string alertText, Popup.Type type = Popup.Type.INFO)
+    {
+        EntityFactory.Get<Popup>().SendText(alertText, type);
     }
 
     private void ViewingInit()

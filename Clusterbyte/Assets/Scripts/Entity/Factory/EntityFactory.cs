@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using Entity.Factory.Enemy;
-using Entity.Factory.Markers;
+using Entity.Factory.Info;
 using Entity.Factory.Types;
 using UnityEngine;
 
@@ -19,6 +19,7 @@ namespace Entity.Factory
         [SerializeField] private GameObject genericMarkerPrefab;
         [SerializeField] private GameObject blobPrefab;
         [SerializeField] private GameObject followingHpBarPrefab;
+        [SerializeField] private GameObject popupPrefab;
 
         internal void Awake()
         {
@@ -27,6 +28,7 @@ namespace Entity.Factory
             entities.Add(new StartMarker(genericMarkerPrefab));
             entities.Add(new EndMarker(genericMarkerPrefab));
             entities.Add(new HPBar(followingHpBarPrefab));
+            entities.Add(new Popup(popupPrefab));
 
             entities.Add(new ShopDeployable("Turret", turretPrefab, 5));
             entities.Add(new Mazeable("Blob", blobPrefab));

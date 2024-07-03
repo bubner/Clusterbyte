@@ -1,5 +1,5 @@
 using Entity.Factory;
-using Entity.Factory.Markers;
+using Entity.Factory.Info;
 using Lib;
 using TMPro;
 using UnityEngine;

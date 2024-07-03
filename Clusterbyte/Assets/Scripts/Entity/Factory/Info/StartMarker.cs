@@ -1,7 +1,7 @@
 using Entity.Factory.Types;
 using UnityEngine;
 
-namespace Entity.Factory.Markers
+namespace Entity.Factory.Info
 {
     public class StartMarker : MapElement
     {
