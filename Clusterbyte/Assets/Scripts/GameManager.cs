@@ -29,6 +29,9 @@ public class GameManager : StateManager
     [SerializeField] private CameraPositioner cam;
     [SerializeField] private UIExtensible shopUI;
     [SerializeField] private UIExtensible viewUI;
+    [SerializeField] private UIExtensible exitWarningUI;
+    [SerializeField] private UIExtensible wonUI;
+    [SerializeField] private UIExtensible loseUI;
     [SerializeField] private TextMeshProUGUI statusText;
     [SerializeField] private GameObject navIndicatorPrefab;
 
@@ -188,10 +191,10 @@ public class GameManager : StateManager
         playerStats = GetComponent<PlayerStats>();
         playerStats.ResetStats();
 
-        VIEWING = new GameState(ViewingInit, ViewingPeriodic, ViewingEnd);
-        SHOPPING = new GameState(ShoppingInit, ShoppingPeriodic, ShoppingEnd);
-        DIED = new GameState(OnDeath, TempExitHandler, null);
-        WON = new GameState(OnWin, TempExitHandler, null);
+        VIEWING = new GameState(ViewingInit, null, ViewingEnd);
+        SHOPPING = new GameState(ShoppingInit, null, ShoppingEnd);
+        DIED = new GameState(OnDeath, null, null);
+        WON = new GameState(OnWin, null, null);
         ACTIVE = new GameState(ActiveInit, ActivePeriodic, ActiveEnd);
 
         // Returns to overview setting at default or ESC
@@ -236,10 +239,6 @@ public class GameManager : StateManager
         viewUI.Show();
     }
 
-    private void ViewingPeriodic()
-    {
-    }
-
     private void ViewingEnd()
     {
         viewUI.Hide();
@@ -255,10 +254,6 @@ public class GameManager : StateManager
         shopUI.Show();
         mouseHover.enabled = false;
         statusText.text = $"Tile: ({worldClicked.x}, {worldClicked.z})";
-    }
-
-    private void ShoppingPeriodic()
-    {
     }
 
     private void ShoppingEnd()
@@ -313,12 +308,14 @@ public class GameManager : StateManager
 
     private void ActivePeriodic()
     {
-        // TODO: Balance an exit mechanic
         if (Input.GetKeyDown(KeyCode.Escape))
-            SetState(VIEWING);
+            exitWarningUI.Show();
+
+        int enemiesAlive = enemies.Count(g => g != null);
+        statusText.text = IsSpawningDone() ? $"Enemies: {enemiesAlive}/{enemies.Count}" : $"Spawning: {enemies.Count}/{Clusterbyte.ENEMY_SPAWN_TIMES[currentLevel].Length}";
 
         // Win condition is when all enemies are dead (array is all null) and the wave is done
-        if (IsSpawningDone() && enemies.All(e => e == null))
+        if (IsSpawningDone() && enemiesAlive <= 0)
             SetState(WON);
         if (playerStats.lives <= 0)
             SetState(DIED);
@@ -338,22 +335,16 @@ public class GameManager : StateManager
 
         enemies.Clear();
         waveCoroutines.Clear();
-    }
-
-    private void TempExitHandler()
-    {
-        // TODO: This feature and handlers are not implemented yet and are placeholders
-        if (Input.GetKeyDown(KeyCode.Escape))
-            SceneManager.LoadScene("Main Menu");
+        statusText.text = $"Level {currentLevel + 1}";
     }
 
     private void OnDeath()
     {
-        statusText.text = "You died! (ESC)";
+        loseUI.Show();
     }
 
     private void OnWin()
     {
-        statusText.text = "You won! (ESC)";
+        wonUI.Show();
     }
 }

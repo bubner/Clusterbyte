@@ -17,6 +17,11 @@ namespace Lib
         public GameState state { get; private set; }
 
         /// <summary>
+        /// Current time spent in the current state.
+        /// </summary>
+        public float timeInState { get; private set; }
+
+        /// <summary>
         /// A bool supplier to determine when a game state change should happen.
         /// </summary>
         protected delegate bool GameStateChangeCriteria();
@@ -42,11 +47,13 @@ namespace Lib
             if (state != previousState)
             {
                 Debug.Log($"State changed from {previousState} to {state}.");
+                timeInState = 0;
                 previousState.OnEnd();
                 state.OnStart();
             }
 
             // Run periodic methods and update last known states
+            timeInState += Time.deltaTime;
             state.Periodic();
             previousState = state;
         }
@@ -69,6 +76,7 @@ namespace Lib
         {
             newState.OnStart();
             state = newState;
+            timeInState = 0;
             if (previousState == null)
             {
                 Debug.Log($"State set to {state}.");
