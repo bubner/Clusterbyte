@@ -32,7 +32,7 @@ namespace Lib
         
         public override string ToString()
         {
-            return $"id:{id}";
+            return $"uid:{id}";
         }
         
         public override bool Equals(object obj)

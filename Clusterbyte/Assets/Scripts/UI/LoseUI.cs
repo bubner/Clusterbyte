@@ -1,4 +1,5 @@
 using Lib;
+using UnityEngine.SceneManagement;
 
 namespace UI
 {
@@ -6,12 +7,15 @@ namespace UI
     {
         public void OnRetryPressed()
         {
-            // TODO
+            // TODO: leave and global lives system
+            // Reload current scene as everything is still configured correctly
+            Clusterbyte.QUEUED_LEVEL = GameManager.instance.currentLevel;
+            SceneManager.LoadScene("Game");
         }
 
         public void OnMainMenuPressed()
         {
-            // TODO
+            SceneManager.LoadScene("Main Menu");
         }
     }
 }

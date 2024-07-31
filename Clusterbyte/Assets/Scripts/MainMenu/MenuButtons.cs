@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace MainMenu
 {
@@ -8,14 +7,12 @@ namespace MainMenu
     /// </summary>
     public class MenuButtons : MonoBehaviour
     {
+        [SerializeField] private GameObject gameSelectionPanel;
+
         public void OnPlayButtonClicked()
         {
-            SceneManager.LoadScene("Game");
-        }
-
-        public void OnSettingsButtonClicked()
-        {
-            // TODO
+            transform.parent.gameObject.SetActive(false);
+            gameSelectionPanel.SetActive(true);
         }
 
         public void OnQuitButtonClicked()

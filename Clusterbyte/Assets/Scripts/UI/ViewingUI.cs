@@ -1,4 +1,5 @@
 using Lib;
+using UnityEngine.SceneManagement;
 
 namespace UI
 {
@@ -10,6 +11,11 @@ namespace UI
         public void OnStartPressed()
         {
             GameManager.instance.SetState(GameManager.ACTIVE);
+        }
+
+        public void OnExitPressed()
+        {
+            SceneManager.LoadScene("Main Menu");
         }
     }
 }

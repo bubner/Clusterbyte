@@ -73,7 +73,7 @@ namespace Player
 
         internal void Update()
         {
-            tokenText.text = "Tokens: " + tokens;
+            tokenText.text = "Level Tokens: " + tokens;
             lifeText.text = "Lives: " + Mathf.Max(0, lives);
         }
     }

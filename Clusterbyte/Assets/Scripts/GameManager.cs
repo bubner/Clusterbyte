@@ -9,7 +9,6 @@ using Lib;
 using Player;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using Viewport;
 
 /// <summary>
@@ -24,7 +23,7 @@ public class GameManager : StateManager
     /// <summary>
     /// Level that the player is currently on.
     /// </summary>
-    public int currentLevel = 0;
+    public int currentLevel = Clusterbyte.QUEUED_LEVEL ?? 0;
 
     [SerializeField] private CameraPositioner cam;
     [SerializeField] private UIExtensible shopUI;
@@ -207,7 +206,6 @@ public class GameManager : StateManager
 
     internal void Start()
     {
-        // TODO: states for on game done for new field stuff
         ParseLevelMap(currentLevel);
         StartCoroutine(SendViewingWave(currentLevel));
     }

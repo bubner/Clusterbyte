@@ -7,6 +7,11 @@ using UnityEngine;
 public static class Clusterbyte
 {
     /// <summary>
+    /// The next level that should be queued to run. Nullable.
+    /// </summary>
+    public static int? QUEUED_LEVEL = null;
+
+    /// <summary>
     /// Convert a world position to a grid position.
     /// </summary>
     /// <param name="vector">world vector</param>

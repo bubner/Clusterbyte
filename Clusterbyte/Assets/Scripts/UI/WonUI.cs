@@ -1,6 +1,7 @@
 using Lib;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace UI
 {
@@ -12,6 +13,11 @@ namespace UI
         {
             base.Show();
             timeText.text = $"in {GameManager.instance.timeInState:F2} seconds";
+        }
+
+        public void OnMenuPressed()
+        {
+            SceneManager.LoadScene("Main Menu");
         }
     }
 }
