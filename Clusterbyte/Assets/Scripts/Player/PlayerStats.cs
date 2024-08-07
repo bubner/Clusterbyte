@@ -13,16 +13,13 @@ namespace Player
         [SerializeField] private TextMeshProUGUI tokenText;
         [SerializeField] private TextMeshProUGUI lifeText;
 
-        public int startingTokens = 5;
-        public int startingLives = 20;
-
         public int tokens { get; private set; }
         public int lives { get; private set; }
 
         /// <summary>
         /// Reset the player's stats to their starting values.
         /// </summary>
-        public void ResetStats()
+        public void SetStats(int startingTokens, int startingLives)
         {
             tokens = startingTokens;
             lives = startingLives;

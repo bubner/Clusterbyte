@@ -36,6 +36,7 @@ public class GameManager : StateManager
 
     private MouseHover mouseHover;
     private CameraPositioner mainCamera;
+    private SaveFile.Save save;
 
     /// <summary>
     /// Stats for the player, including tokens and lives.
@@ -55,7 +56,8 @@ public class GameManager : StateManager
     private readonly List<Vector2> takenPositions = new();
     private readonly List<GameObject> enemies = new();
     private readonly List<Coroutine> waveCoroutines = new();
-    private GameObject[] viewingWaveEnemies;
+    private GameObject[] viewingWaveEnemies = {};
+    private Coroutine sendViewingWave;
 
     /// <summary>
     /// Default state to be looking at the field and not interacting with it.
@@ -186,9 +188,10 @@ public class GameManager : StateManager
     {
         // Assign variables
         instance = this;
+        save = SaveFile.Load();
         TryGetComponent(out mouseHover);
         playerStats = GetComponent<PlayerStats>();
-        playerStats.ResetStats();
+        playerStats.SetStats(Clusterbyte.TOKENS_PER_LEVEL[currentLevel], save.lives);
 
         VIEWING = new GameState(ViewingInit, null, ViewingEnd);
         SHOPPING = new GameState(ShoppingInit, null, ShoppingEnd);
@@ -207,7 +210,7 @@ public class GameManager : StateManager
     internal void Start()
     {
         ParseLevelMap(currentLevel);
-        StartCoroutine(SendViewingWave(currentLevel));
+        sendViewingWave = StartCoroutine(SendViewingWave(currentLevel));
     }
 
     private IEnumerator SendViewingWave(int level)
@@ -281,6 +284,7 @@ public class GameManager : StateManager
         }
 
         // Remove any viewing markers that have not been destroyed by the end of the wave
+        StopCoroutine(sendViewingWave);
         foreach (GameObject viewingMarker in viewingWaveEnemies)
         {
             if (viewingMarker != null)
@@ -334,6 +338,9 @@ public class GameManager : StateManager
         enemies.Clear();
         waveCoroutines.Clear();
         statusText.text = $"Level {currentLevel + 1}";
+
+        save.lives = playerStats.lives;
+        SaveFile.SaveData(save);
     }
 
     private void OnDeath()
@@ -344,5 +351,10 @@ public class GameManager : StateManager
     private void OnWin()
     {
         wonUI.Show();
+        float millis = timeInState * 1000f;
+        int old = save.completedLevelTimesMillis[currentLevel];
+        if (old == 0 || millis < old)
+            save.completedLevelTimesMillis[currentLevel] = Mathf.RoundToInt(millis);
+        SaveFile.SaveData(save);
     }
 }

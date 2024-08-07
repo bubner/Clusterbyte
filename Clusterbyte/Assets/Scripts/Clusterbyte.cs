@@ -12,6 +12,11 @@ public static class Clusterbyte
     public static int? QUEUED_LEVEL = null;
 
     /// <summary>
+    /// Number of lives for a new save.
+    /// </summary>
+    public const int STARTING_LIVES = 20;
+
+    /// <summary>
     /// Convert a world position to a grid position.
     /// </summary>
     /// <param name="vector">world vector</param>
@@ -78,4 +83,6 @@ public static class Clusterbyte
             new(6f, "Blob"),
         },
     };
+
+    public static readonly int[] TOKENS_PER_LEVEL = { 20 };
 }

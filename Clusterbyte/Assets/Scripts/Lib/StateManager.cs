@@ -16,7 +16,7 @@ namespace Lib
         public GameState state { get; private set; }
 
         /// <summary>
-        /// Current time spent in the current state.
+        /// Current time spent in the current state in seconds. Updated during periodic calls.
         /// </summary>
         public float timeInState { get; private set; }
 
