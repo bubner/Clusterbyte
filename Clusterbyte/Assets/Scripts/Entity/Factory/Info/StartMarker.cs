@@ -13,5 +13,10 @@ namespace Entity.Factory.Info
         {
             o.GetComponent<Renderer>().material.color = Color.green;
         }
+
+        public override object Clone()
+        {
+            return new StartMarker(prefab);
+        }
     }
 }

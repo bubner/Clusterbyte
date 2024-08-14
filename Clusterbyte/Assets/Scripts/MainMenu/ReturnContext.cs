@@ -2,6 +2,9 @@ using UnityEngine;
 
 namespace MainMenu
 {
+    /// <summary>
+    /// Return to the Level Selection screen if we're coming from a level, otherwise return to the main menu.
+    /// </summary>
     public class ReturnContext : MonoBehaviour
     {
         [SerializeField] private GameObject mainMenuPanel;

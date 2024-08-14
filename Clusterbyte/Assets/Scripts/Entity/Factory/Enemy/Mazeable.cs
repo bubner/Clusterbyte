@@ -11,5 +11,10 @@ namespace Entity.Factory.Enemy
         {
             // name will be used when spawning as a key to the dictionary in the level factory
         }
+
+        public override object Clone()
+        {
+            return new Mazeable(name, prefab);
+        }
     }
 }

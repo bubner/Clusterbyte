@@ -23,7 +23,8 @@ public static class Clusterbyte
     /// <returns>grid vector</returns>
     public static Vector2 ConvertTo2D(Vector3 vector)
     {
-        return new Vector2(vector.x, vector.z);
+        // Need to round to the nearest integer to avoid floating point errors
+        return new Vector2(Mathf.RoundToInt(vector.x), Mathf.RoundToInt(vector.z));
     }
 
     /// <summary>
@@ -84,5 +85,5 @@ public static class Clusterbyte
         },
     };
 
-    public static readonly int[] TOKENS_PER_LEVEL = { 20 };
+    public static readonly int[] TOKENS_PER_LEVEL = { 10 };
 }

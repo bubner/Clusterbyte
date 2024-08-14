@@ -8,6 +8,7 @@ using Entity.Factory.Types;
 using Lib;
 using Player;
 using TMPro;
+using UI;
 using UnityEngine;
 using Viewport;
 
@@ -28,6 +29,7 @@ public class GameManager : StateManager
     [SerializeField] private CameraPositioner cam;
     [SerializeField] private UIExtensible shopUI;
     [SerializeField] private UIExtensible viewUI;
+    [SerializeField] private EditingUI editingUI;
     [SerializeField] private UIExtensible exitWarningUI;
     [SerializeField] private UIExtensible wonUI;
     [SerializeField] private UIExtensible loseUI;
@@ -50,10 +52,12 @@ public class GameManager : StateManager
     /// Where enemies will try to move to in this level.
     /// </summary>
     public GameObject entityTarget { get; private set; }
+    /// <summary>
+    /// Currently deployed items on the field.
+    /// </summary>
+    public readonly List<ShopDeployable> deployed = new();
 
     private readonly List<GameObject> placeableTerrain = new();
-    private readonly List<GameObject> deployed = new();
-    private readonly List<Vector2> takenPositions = new();
     private readonly List<GameObject> enemies = new();
     private readonly List<Coroutine> waveCoroutines = new();
     private GameObject[] viewingWaveEnemies = {};
@@ -67,6 +71,10 @@ public class GameManager : StateManager
     /// Selected an empty tile to place a defender on.
     /// </summary>
     public static GameState SHOPPING;
+    /// <summary>
+    /// Selected a defender to see and remove.
+    /// </summary>
+    public static GameState EDITING;
     /// <summary>
     /// Enemies have won.
     /// </summary>
@@ -134,7 +142,8 @@ public class GameManager : StateManager
     /// <returns>whether this position is occupied by a player-placed item</returns>
     public bool IsOccupied(Vector3 position)
     {
-        return takenPositions.Contains(Clusterbyte.ConvertTo2D(position));
+        return deployed
+            .Any(d => Clusterbyte.ConvertTo2D(d.instance.transform.position) == Clusterbyte.ConvertTo2D(position));
     }
 
     /// <summary>
@@ -144,7 +153,8 @@ public class GameManager : StateManager
     /// <returns>whether this position can have items placed on</returns>
     public bool IsPlaceable(Vector3 position)
     {
-        return placeableTerrain.Any(t => Clusterbyte.ConvertTo2D(t.transform.position) == Clusterbyte.ConvertTo2D(position));
+        return placeableTerrain
+            .Any(t => Clusterbyte.ConvertTo2D(t.transform.position) == Clusterbyte.ConvertTo2D(position));
     }
 
     /// <summary>
@@ -165,7 +175,7 @@ public class GameManager : StateManager
         }
         if (!EntityFactory.TryGet(itemName, out ShopDeployable item))
         {
-            SendAlert($"Item {itemName} does not exist.", Popup.Type.ERROR);
+            SendAlert($"Item {itemName} does not exist.", Popup.Type.WARNING);
             return;
         }
 
@@ -174,8 +184,8 @@ public class GameManager : StateManager
         if (playerStats.TryTransaction(item.cost))
         {
             SendAlert($"Bought {itemName} for {item.cost} tokens.");
-            deployed.Add(Instantiate(item.prefab, position + new Vector3(0, 2, 0), Quaternion.identity));
-            takenPositions.Add(Clusterbyte.ConvertTo2D(position));
+            item.Instantiate(position + new Vector3(0, 2, 0), Quaternion.identity);
+            deployed.Add(item);
             SetState(VIEWING);
         }
         else
@@ -195,16 +205,20 @@ public class GameManager : StateManager
 
         VIEWING = new GameState(ViewingInit, null, ViewingEnd);
         SHOPPING = new GameState(ShoppingInit, null, ShoppingEnd);
+        EDITING = new GameState(EditingInit, EditingPeriodic, EditingEnd);
         DIED = new GameState(OnDeath, null, null);
         WON = new GameState(OnWin, null, null);
         ACTIVE = new GameState(ActiveInit, ActivePeriodic, ActiveEnd);
 
         // Returns to overview setting at default or ESC
         SetState(VIEWING);
-        ChangeStateOnEvent(() => state == SHOPPING && Input.GetKeyDown(KeyCode.Escape), VIEWING);
+        ChangeStateOnEvent(() => (state == SHOPPING || state == EDITING) && Input.GetKeyDown(KeyCode.Escape), VIEWING);
 
         // On click of terrain during overview setting, switch to observing states
         ChangeStateOnEvent(() => state == VIEWING && Input.GetMouseButtonDown(0) && mouseHover.isHovering && !IsOccupied(mouseHover.hoveredPosition), SHOPPING);
+
+        // On click of placed item during overview setting, switch to editing states
+        ChangeStateOnEvent(() => state == VIEWING && Input.GetMouseButtonDown(0) && mouseHover.isHovering && IsOccupied(mouseHover.hoveredPosition), EDITING);
     }
 
     internal void Start()
@@ -226,7 +240,7 @@ public class GameManager : StateManager
         }
     }
 
-    private void SendAlert(string alertText, Popup.Type type = Popup.Type.INFO)
+    private void SendAlert(string alertText, Popup.Type type = Popup.Type.SUCCESS)
     {
         EntityFactory.Get<Popup>().SendText(alertText, type);
     }
@@ -260,6 +274,42 @@ public class GameManager : StateManager
     private void ShoppingEnd()
     {
         shopUI.Hide();
+    }
+
+    private void EditingInit()
+    {
+        Vector3 worldClicked = mouseHover.hoveredPosition;
+        cam.interpolateSpeed = 4;
+        cam.SetCustomSpot(worldClicked + new Vector3(0, 3, -3), Quaternion.Euler(30, 0, 0));
+        cam.SetPosition(CameraPositioner.CameraSpot.CUSTOM);
+        mouseHover.enabled = false;
+        statusText.text = $"Editing: ({worldClicked.x}, {worldClicked.z})";
+        // Sort by distance from clicked position
+        ShopDeployable nearest = deployed
+            .Find(d => Clusterbyte.ConvertTo2D(d.instance.transform.position) == Clusterbyte.ConvertTo2D(worldClicked));
+        if (nearest == null)
+        {
+            // Impossible state
+            SetState(VIEWING);
+            return;
+        }
+        editingUI.SetItem(nearest);
+        editingUI.Show();
+    }
+
+    private void EditingPeriodic()
+    {
+        // Orbit around the current custom spot
+        Transform spot = cam.GetCustomSpot();
+        spot.RotateAround(spot.position, Vector3.up, 20 * Time.deltaTime);
+        spot.Translate(Vector3.left * Time.deltaTime);
+        cam.SetCustomSpot(spot.position, spot.rotation);
+    }
+
+    private void EditingEnd()
+    {
+        editingUI.Hide();
+        mouseHover.enabled = true;
     }
 
     private void ActiveInit()

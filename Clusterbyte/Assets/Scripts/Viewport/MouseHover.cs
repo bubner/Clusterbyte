@@ -58,7 +58,7 @@ namespace Viewport
             shouldHover = true;
             if (mgr.IsOccupied(hoveredPosition))
             {
-                meshRenderer.material.color = new Color(1f, 1f, 0, 0.4f);
+                meshRenderer.material.color = new Color(0, 1f, 1f, 0.4f);
                 return;
             }
             if (mgr.IsPlaceable(hoveredPosition))

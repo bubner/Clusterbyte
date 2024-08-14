@@ -17,8 +17,8 @@ namespace Entity.Factory.Info
         public enum Type
         {
             INFO,
-            WARNING,
-            ERROR
+            SUCCESS,
+            WARNING
         }
 
         /// <summary>
@@ -32,11 +32,16 @@ namespace Entity.Factory.Info
             instance.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = text;
             instance.GetComponent<Image>().color = type switch
             {
-                Type.INFO => Color.green,
+                Type.SUCCESS => Color.green,
                 Type.WARNING => Color.yellow,
-                Type.ERROR => Color.red,
+                Type.INFO => Color.gray,
                 _ => instance.GetComponent<Image>().color
             };
+        }
+
+        public override object Clone()
+        {
+            return new Popup(prefab);
         }
     }
 }

@@ -8,5 +8,10 @@ namespace Entity.Factory.Types
         {
             prefab.name = "Terrain" + name;
         }
+
+        public override object Clone()
+        {
+            return new MapElement(name, prefab);
+        }
     }
 }

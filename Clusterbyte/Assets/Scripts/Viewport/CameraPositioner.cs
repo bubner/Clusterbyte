@@ -43,6 +43,11 @@ namespace Viewport
             observingSpot.rotation = rot;
         }
 
+        public Transform GetCustomSpot()
+        {
+            return observingSpot;
+        }
+
         /// <summary>
         /// Set the position of the camera to the specified spot
         /// </summary>

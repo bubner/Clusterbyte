@@ -30,7 +30,7 @@ namespace Entity.Factory
             entities.Add(new HPBar(followingHpBarPrefab));
             entities.Add(new Popup(popupPrefab));
 
-            entities.Add(new ShopDeployable("Turret", turretPrefab, 5));
+            entities.Add(new ShopDeployable("Turret", turretPrefab, 5, "Locks onto the closest enemy and shoots at it. Shells deal Area-of-Effect damage."));
             entities.Add(new Mazeable("Blob", blobPrefab));
         }
 
@@ -44,7 +44,7 @@ namespace Entity.Factory
         {
             Entity entity = entities.Find(entity => entity.name == entityName);
             if (entity != null)
-                return (T)entity;
+                return (T)entity.Clone();
             Debug.LogError($"Entity {entityName} not found.");
             return null;
         }
@@ -58,7 +58,7 @@ namespace Entity.Factory
         {
             Entity entity = entities.Find(entity => entity.GetType() == typeof(T));
             if (entity != null)
-                return (T)entity;
+                return (T)entity.Clone();
             Debug.LogError("Entity not found.");
             return null;
         }
@@ -74,7 +74,7 @@ namespace Entity.Factory
             Entity entity = entities.Find(entity => entity.GetType() == typeof(T));
             if (entity != null)
             {
-                obj = entity;
+                obj = entity.Clone() as Entity;
                 return true;
             }
 
@@ -95,7 +95,7 @@ namespace Entity.Factory
             Entity entity = entities.Find(entity => entity.name == entityName);
             if (entity is T e)
             {
-                obj = e;
+                obj = e.Clone() as T;
                 return true;
             }
 

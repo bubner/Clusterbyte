@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 namespace MainMenu
 {
+    /// <summary>
+    /// Level button selector and completion text.
+    /// </summary>
     public class Level : MonoBehaviour
     {
         [SerializeField] private int level;

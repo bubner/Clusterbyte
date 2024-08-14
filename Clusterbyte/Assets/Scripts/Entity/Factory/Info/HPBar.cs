@@ -8,5 +8,10 @@ namespace Entity.Factory.Info
         {
             // HPBars are the same for all enemies
         }
+
+        public override object Clone()
+        {
+            return new HPBar(prefab);
+        }
     }
 }

@@ -1,11 +1,13 @@
+using System;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Entity.Factory
 {
     /// <summary>
     /// An entity with prefab and name description that can be instantiated in the game world.
     /// </summary>
-    public abstract class Entity
+    public abstract class Entity : ICloneable
     {
         protected Entity(string name, GameObject prefab)
         {
@@ -63,5 +65,7 @@ namespace Entity.Factory
         protected virtual void OnSpawn(GameObject spawnedObject)
         {
         }
+
+        public abstract object Clone();
     }
 }

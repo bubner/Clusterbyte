@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 namespace MainMenu
 {
+    /// <summary>
+    /// Game Selector interactivity for the main menu.
+    /// </summary>
     public class GameSelector : MonoBehaviour
     {
         [SerializeField] private GameObject mainMenuPanel;
