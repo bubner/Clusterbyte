@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace MainMenu
 {
@@ -13,6 +14,11 @@ namespace MainMenu
         {
             transform.parent.gameObject.SetActive(false);
             gameSelectionPanel.SetActive(true);
+        }
+
+        public void OnHowToPlayClicked()
+        {
+            SceneManager.LoadScene("How To Play");
         }
 
         public void OnQuitButtonClicked()

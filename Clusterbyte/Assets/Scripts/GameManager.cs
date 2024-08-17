@@ -268,7 +268,7 @@ public class GameManager : StateManager
         cam.SetPosition(CameraPositioner.CameraSpot.CUSTOM);
         shopUI.Show();
         mouseHover.enabled = false;
-        statusText.text = $"Tile: ({worldClicked.x}, {worldClicked.z})";
+        statusText.text = $"Tile ({worldClicked.x},{worldClicked.z})";
     }
 
     private void ShoppingEnd()
@@ -283,7 +283,7 @@ public class GameManager : StateManager
         cam.SetCustomSpot(worldClicked + new Vector3(0, 3, -3), Quaternion.Euler(30, 0, 0));
         cam.SetPosition(CameraPositioner.CameraSpot.CUSTOM);
         mouseHover.enabled = false;
-        statusText.text = $"Editing: ({worldClicked.x}, {worldClicked.z})";
+        statusText.text = $"Editing ({worldClicked.x},{worldClicked.z})";
         // Sort by distance from clicked position
         ShopDeployable nearest = deployed
             .Find(d => Clusterbyte.ConvertTo2D(d.instance.transform.position) == Clusterbyte.ConvertTo2D(worldClicked));
