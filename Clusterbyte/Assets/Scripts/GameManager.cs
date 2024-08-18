@@ -201,7 +201,6 @@ public class GameManager : StateManager
         save = SaveFile.Load();
         TryGetComponent(out mouseHover);
         playerStats = GetComponent<PlayerStats>();
-        playerStats.SetStats(Clusterbyte.TOKENS_PER_LEVEL[currentLevel], save.lives);
 
         VIEWING = new GameState(ViewingInit, null, ViewingEnd);
         SHOPPING = new GameState(ShoppingInit, null, ShoppingEnd);
@@ -223,8 +222,10 @@ public class GameManager : StateManager
 
     internal void Start()
     {
+        currentLevel = Clusterbyte.QUEUED_LEVEL ?? 0;
         ParseLevelMap(currentLevel);
         sendViewingWave = StartCoroutine(SendViewingWave(currentLevel));
+        playerStats.SetStats(Clusterbyte.TOKENS_PER_LEVEL[currentLevel], save.lives);
     }
 
     private IEnumerator SendViewingWave(int level)

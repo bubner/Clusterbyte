@@ -19,7 +19,7 @@ namespace MainMenu
         {
             levelText.text = "Level " + level;
             SaveFile.Save saveFile = SaveFile.Load();
-            if (saveFile.completedLevelTimesMillis[level - 1] > 0)
+            if (saveFile.completedLevelTimesMillis.Length > level - 1 && saveFile.completedLevelTimesMillis[level - 1] > 0)
             {
                 GetComponent<Image>().color = new Color(85 / 255f, 255 / 255f, 74 / 255f, 100 / 255f);
                 int millis = saveFile.completedLevelTimesMillis[level - 1];
@@ -38,7 +38,7 @@ namespace MainMenu
             }
             button.onClick.AddListener(() =>
             {
-                Clusterbyte.QUEUED_LEVEL = level;
+                Clusterbyte.QUEUED_LEVEL = level - 1;
                 SceneManager.LoadScene("Game");
             });
         }

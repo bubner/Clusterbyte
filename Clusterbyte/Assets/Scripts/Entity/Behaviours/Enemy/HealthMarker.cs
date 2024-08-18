@@ -13,6 +13,7 @@ namespace Entity.Behaviours.Enemy
     public class HealthMarker : UIExtensible
     {
         [SerializeField] private Health health;
+        [SerializeField] private float scale = 1f;
         private GameObject obj;
         private Image background;
         private Slider bar;
@@ -26,6 +27,8 @@ namespace Entity.Behaviours.Enemy
             bar = obj.GetComponentInChildren<Slider>();
             background = bar.GetComponentsInChildren<Image>()[1];
             text = obj.GetComponentInChildren<TextMeshProUGUI>();
+
+            obj.transform.localScale = Vector3.one * scale;
         }
 
         internal void Update()

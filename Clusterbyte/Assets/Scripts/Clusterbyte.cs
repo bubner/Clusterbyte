@@ -67,6 +67,19 @@ public static class Clusterbyte
             new [] { 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 2, 2, 1, 0, 1 },
             new [] { 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1 },
             new [] { 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+        },
+        new []
+        {
+            new [] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+            new [] { 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1 },
+            new [] { 1, 1, 1, 0, 2, 1, 1, 1, 2, 2, 1, 1, 0, 0, 2, 1, 1, 1 },
+            new [] { 1, 2, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1 },
+            new [] { 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 2, 0, 1, 1 },
+            new [] { 1, 2, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1 },
+            new [] { 1, 2, 0, 1, 1, 1, 1, 1, 1, 0, 2, 0, 1, 1, 1, 1, 1, 1 },
+            new [] { 1, 1, 0, 2, 2, 2, 1, 1, 2, 0, 0, 0, 0, 0, 0, 0, 1, 1 },
+            new [] { 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1, 1 },
+            new [] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1 },
         }
     };
 
@@ -82,8 +95,24 @@ public static class Clusterbyte
             new(3f, "Blob"),
             new(4f, "Blob"),
             new(6f, "Blob"),
+            new(7f, "Blob"),
+            new(8f, "Blob"),
+            new(9f, "Blob"),
+            new(10f, "Blob"),
         },
+        new[]
+        {
+            new Tuple<float, string>(0.1f, "Drone"),
+            new(1f, "Blob"),
+            new(1.2f, "Blob"),
+            new(1.4f, "Blob"),
+            new(1.6f, "Blob"),
+            new(4f, "Drone"),
+            new(4.2f, "Drone"),
+            new(4.4f, "Drone"),
+            new(4.6f, "Drone"),
+        }
     };
 
-    public static readonly int[] TOKENS_PER_LEVEL = { 10 };
+    public static readonly int[] TOKENS_PER_LEVEL = { 15, 25 };
 }

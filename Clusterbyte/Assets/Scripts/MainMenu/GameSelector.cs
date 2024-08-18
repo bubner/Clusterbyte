@@ -24,7 +24,7 @@ namespace MainMenu
             {
                 livesLeftText.transform.parent.gameObject.GetComponent<Image>().color = Color.red;
             }
-            livesLeftText.text = $"Lives left: {save.lives}";
+            livesLeftText.text = $"Lives left: {Mathf.Max(0, save.lives)}";
             confirming = false;
         }
 

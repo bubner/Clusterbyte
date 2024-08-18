@@ -18,6 +18,8 @@ namespace Entity.Behaviours.Placeables.Turret
         private GameObject target;
         private float timer;
 
+        // TODO: laser blaster
+
         internal void Update()
         {
             if (!target)

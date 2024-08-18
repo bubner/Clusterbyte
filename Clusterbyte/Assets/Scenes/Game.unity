@@ -3419,6 +3419,7 @@ MonoBehaviour:
   deadTerrainPrefab: {fileID: 1065103620393454603, guid: ebabd6ef64e84fce8ac403d842c70c9c, type: 3}
   genericMarkerPrefab: {fileID: 5810786740800602072, guid: 9be079a3d3b25de94a08d490c92f7368, type: 3}
   blobPrefab: {fileID: 7472470767290072033, guid: 6e572bdea16570384a99533cefab89a2, type: 3}
+  dronePrefab: {fileID: 4955954159871419468, guid: d78b9f119b84392308c9d858190f3b22, type: 3}
   followingHpBarPrefab: {fileID: 3519065708732000080, guid: 39499e71254aa68b28816f96848fdd28, type: 3}
   popupPrefab: {fileID: 6691060968958829059, guid: 8138c843f712dc17086fecad1a49cc1b, type: 3}
 --- !u!1 &1082899763

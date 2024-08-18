@@ -18,6 +18,7 @@ namespace Entity.Factory
         [SerializeField] private GameObject deadTerrainPrefab;
         [SerializeField] private GameObject genericMarkerPrefab;
         [SerializeField] private GameObject blobPrefab;
+        [SerializeField] private GameObject dronePrefab;
         [SerializeField] private GameObject followingHpBarPrefab;
         [SerializeField] private GameObject popupPrefab;
 
@@ -31,7 +32,9 @@ namespace Entity.Factory
             entities.Add(new Popup(popupPrefab));
 
             entities.Add(new ShopDeployable("Turret", turretPrefab, 5, "Locks onto the closest enemy and shoots at it. Shells deal Area-of-Effect damage."));
+
             entities.Add(new Mazeable("Blob", blobPrefab));
+            entities.Add(new Mazeable("Drone", dronePrefab));
         }
 
         /// <summary>
