@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657832, g: 0.49641222, b: 0.57481664, a: 1}
+  m_IndirectSpecularColor: {r: 0.4465791, g: 0.4964133, b: 0.57481784, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1319,6 +1319,67 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 284418728}
   m_CullTransparentMesh: 1
+--- !u!1001 &304129846
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2532889928961821558, guid: 5b68aa99db0d4c5e1a0111a38b7e88cb, type: 3}
+      propertyPath: m_Volume
+      value: 0.34
+      objectReference: {fileID: 0}
+    - target: {fileID: 6035081736417380179, guid: 5b68aa99db0d4c5e1a0111a38b7e88cb, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1.6214795
+      objectReference: {fileID: 0}
+    - target: {fileID: 6035081736417380179, guid: 5b68aa99db0d4c5e1a0111a38b7e88cb, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6035081736417380179, guid: 5b68aa99db0d4c5e1a0111a38b7e88cb, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 4.2693634
+      objectReference: {fileID: 0}
+    - target: {fileID: 6035081736417380179, guid: 5b68aa99db0d4c5e1a0111a38b7e88cb, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6035081736417380179, guid: 5b68aa99db0d4c5e1a0111a38b7e88cb, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6035081736417380179, guid: 5b68aa99db0d4c5e1a0111a38b7e88cb, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6035081736417380179, guid: 5b68aa99db0d4c5e1a0111a38b7e88cb, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6035081736417380179, guid: 5b68aa99db0d4c5e1a0111a38b7e88cb, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6035081736417380179, guid: 5b68aa99db0d4c5e1a0111a38b7e88cb, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6035081736417380179, guid: 5b68aa99db0d4c5e1a0111a38b7e88cb, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6035081736417483635, guid: 5b68aa99db0d4c5e1a0111a38b7e88cb, type: 3}
+      propertyPath: m_Name
+      value: Nuker
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 5b68aa99db0d4c5e1a0111a38b7e88cb, type: 3}
 --- !u!1 &311232786
 GameObject:
   m_ObjectHideFlags: 0
@@ -3625,6 +3686,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   turretPrefab: {fileID: 59756771688914052, guid: 95f386c16f7eaf5af8df202df79e5cf2, type: 3}
   laserBlasterPrefab: {fileID: 6307686098485230674, guid: b5427c9d78f93e5e68c0981231c1a410, type: 3}
+  nukerPrefab: {fileID: 0}
   placeableTerrainPrefab: {fileID: 1065103620393454603, guid: 4305a4200acef98ca87842b85bbb9c7f, type: 3}
   deadTerrainPrefab: {fileID: 1065103620393454603, guid: ebabd6ef64e84fce8ac403d842c70c9c, type: 3}
   genericMarkerPrefab: {fileID: 5810786740800602072, guid: 9be079a3d3b25de94a08d490c92f7368, type: 3}
@@ -7311,3 +7373,4 @@ SceneRoots:
   - {fileID: 859044157}
   - {fileID: 1296197291}
   - {fileID: 418125380}
+  - {fileID: 304129846}

@@ -17,7 +17,6 @@ namespace Entity.Behaviours.Placeables.LaserBlaster
 
         private LineRenderer laserRenderer;
         private GameObject target;
-        private float idleT;
 
         internal void Awake()
         {
@@ -28,9 +27,10 @@ namespace Entity.Behaviours.Placeables.LaserBlaster
         {
             if (!target)
             {
-                // Lerp left and right for an idle animation
-                idleT += Time.deltaTime;
-                head.rotation = Quaternion.Euler(0, Mathf.Lerp(0, 60, Mathf.PingPong(idleT, 1)), 0);
+                // Lerp left and right for an idle animation. We can rely on a consistent incrementation of a variable
+                // through Time.time
+                head.rotation = Quaternion.Euler(0, Mathf.Lerp(0, 60, Mathf.PingPong(Time.time, 1)), 0);
+                transform.rotation = Quaternion.identity;
 
                 laserSound.Stop();
                 laserRenderer.enabled = false;
