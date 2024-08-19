@@ -104,13 +104,13 @@ public static class Clusterbyte
         {
             new Tuple<float, string>(0.1f, "Drone"),
             new(1f, "Blob"),
-            new(1.2f, "Blob"),
-            new(1.4f, "Blob"),
-            new(1.6f, "Blob"),
-            new(4f, "Drone"),
-            new(4.2f, "Drone"),
-            new(4.4f, "Drone"),
-            new(4.6f, "Drone"),
+            new(2f, "Blob"),
+            new(3f, "Blob"),
+            new(4f, "Blob"),
+            new(6f, "Drone"),
+            new(6.3f, "Drone"),
+            new(6.6f, "Drone"),
+            new(6.9f, "Drone"),
         }
     };
 
