@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -18,6 +20,26 @@ namespace Entity.Behaviours.Enemy
         internal void Awake()
         {
             TryGetComponent(out agent);
+        }
+
+        internal void OnCollisionEnter(Collision other)
+        {
+            if (!other.gameObject.CompareTag("Enemy")) return;
+            StartCoroutine(Yield(other.gameObject));
+        }
+
+        private void Go()
+        {
+            StopCoroutine(nameof(Yield));
+            agent.isStopped = false;
+        }
+
+        private IEnumerator Yield(GameObject priority)
+        {
+            priority.GetComponent<NavigateMaze>().Go();
+            agent.isStopped = true;
+            yield return new WaitForSeconds(3f);
+            agent.isStopped = false;
         }
 
         internal void Update()

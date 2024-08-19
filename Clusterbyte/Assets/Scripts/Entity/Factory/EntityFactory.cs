@@ -14,6 +14,7 @@ namespace Entity.Factory
         private static readonly List<Entity> entities = new();
 
         [SerializeField] private GameObject turretPrefab;
+        [SerializeField] private GameObject laserBlasterPrefab;
         [SerializeField] private GameObject placeableTerrainPrefab;
         [SerializeField] private GameObject deadTerrainPrefab;
         [SerializeField] private GameObject genericMarkerPrefab;
@@ -31,7 +32,8 @@ namespace Entity.Factory
             entities.Add(new HPBar(followingHpBarPrefab));
             entities.Add(new Popup(popupPrefab));
 
-            entities.Add(new ShopDeployable("Turret", turretPrefab, 5, "Locks onto the closest enemy and shoots at it. Shells deal Area-of-Effect damage."));
+            entities.Add(new ShopDeployable("Turret", turretPrefab, 5, "Locks onto the closest enemy and shoots at it. Shells deal Area-of-Effect damage. Normal radius."));
+            entities.Add(new ShopDeployable("Laser Blaster", laserBlasterPrefab, 15, "Locks onto the closest enemy and continuously deals damage in a piercing beam that can hurt multiple enemies. Large radius."));
 
             entities.Add(new Mazeable("Blob", blobPrefab));
             entities.Add(new Mazeable("Drone", dronePrefab));
