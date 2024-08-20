@@ -9691,7 +9691,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0ebebddb5cd4734b67583cfa9c8f73a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shakeAmount: 1
+  shakeAmount: 0.5
 --- !u!198 &360784378669208692
 ParticleSystem:
   m_ObjectHideFlags: 0

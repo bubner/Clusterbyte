@@ -31,7 +31,7 @@ namespace Entity.Behaviours.Placeables.Nuker
 
         internal void Update()
         {
-            if (enemyCount < minimumNukeEnemyCount)
+            if (enemyCount < minimumNukeEnemyCount || GameManager.instance.state != GameManager.ACTIVE)
             {
                 headRenderer.material.color = Color.Lerp(headRenderer.material.color, Color.white, Time.deltaTime);
                 transform.Rotate(Vector3.up, 45 * Time.deltaTime);
