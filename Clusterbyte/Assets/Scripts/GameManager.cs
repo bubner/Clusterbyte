@@ -315,6 +315,8 @@ public class GameManager : StateManager
 
     private void ActiveInit()
     {
+        GameObject.FindWithTag("GameController").GetComponent<MouseNoiseMaker>().enabled = false;
+
         // Set up field for viewing and disable UI
         entitySpawn.SetActive(false);
         entityTarget.SetActive(false);
@@ -376,6 +378,8 @@ public class GameManager : StateManager
 
     private void ActiveEnd()
     {
+        GameObject.FindWithTag("GameController").GetComponent<MouseNoiseMaker>().enabled = true;
+
         // Halt all waves
         foreach (Coroutine waveCoroutine in waveCoroutines)
             StopCoroutine(waveCoroutine);
