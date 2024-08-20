@@ -35,7 +35,7 @@ namespace Entity.Factory
 
             entities.Add(new ShopDeployable("Turret", turretPrefab, 5, "Locks onto the closest enemy and shoots at it. Shells deal Area-of-Effect damage. Normal radius."));
             entities.Add(new ShopDeployable("Laser Blaster", laserBlasterPrefab, 15, "Locks onto the closest enemy and continuously deals damage in a piercing beam that can hurt multiple enemies. Large radius."));
-            entities.Add(new ShopDeployable("Nuker", nukerPrefab, 30, "Destroyer of all existing things. Summons a nuke after charging, dealing significant damage. Loud. Requires at least three enemies to be in range."));
+            entities.Add(new ShopDeployable("Nuker", nukerPrefab, 30, "Destroyer of all existing things. Summons a nuke after charging, permanently damaging terrain and everything nearby. Loud. Requires at least three enemies to be in range."));
 
             entities.Add(new Mazeable("Blob", blobPrefab));
             entities.Add(new Mazeable("Drone", dronePrefab));

@@ -11,10 +11,22 @@ namespace Entity.Behaviours.Placeables.Nuker
         public float nukeRadius = 6;
 
         [SerializeField] private GameObject explosionPrefab;
+        private Vector3 velocity;
 
-        // Arg-less, we don't care about what we hit
-        internal void OnCollisionEnter()
+        internal void Update()
         {
+            velocity += Physics.gravity * Time.deltaTime;
+            transform.position += velocity * Time.deltaTime;
+        }
+
+        internal void OnTriggerEnter(Collider other)
+        {
+            if (other.gameObject.CompareTag("Nuke") || transform.position.y > 3)
+            {
+                // Ignore other nukes or triggers that are too high
+                return;
+            }
+
             // Apply damage (immediate destruction) to everything in radius. Need to use a high max allocation for this.
             Collider[] hits = new Collider[200];
             int size = Physics.OverlapSphereNonAlloc(transform.position, nukeRadius, hits);
@@ -29,11 +41,11 @@ namespace Entity.Behaviours.Placeables.Nuker
                 // Destroy everything else, including terrain and user-placed items
                 if (obj.TryGetComponent(out Health health))
                     health.TakeDamage(Mathf.Infinity);
-                Destroy(obj);
+                obj.SetActive(false);
             }
 
             // Nuke should disappear instantly and explosion effects will be handled by the particles
-            Destroy(gameObject);
+            gameObject.SetActive(false);
             Instantiate(explosionPrefab);
         }
     }

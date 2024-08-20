@@ -143,7 +143,7 @@ public class GameManager : StateManager
     public bool IsOccupied(Vector3 position)
     {
         return deployed
-            .Any(d => Clusterbyte.ConvertTo2D(d.instance.transform.position) == Clusterbyte.ConvertTo2D(position));
+            .Any(d => d.instance != null && Clusterbyte.ConvertTo2D(d.instance.transform.position) == Clusterbyte.ConvertTo2D(position));
     }
 
     /// <summary>
@@ -154,7 +154,7 @@ public class GameManager : StateManager
     public bool IsPlaceable(Vector3 position)
     {
         return placeableTerrain
-            .Any(t => Clusterbyte.ConvertTo2D(t.transform.position) == Clusterbyte.ConvertTo2D(position));
+            .Any(t => t != null && Clusterbyte.ConvertTo2D(t.transform.position) == Clusterbyte.ConvertTo2D(position));
     }
 
     /// <summary>
