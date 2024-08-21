@@ -70,7 +70,7 @@ namespace Player
 
         internal void Update()
         {
-            tokenText.text = "Level Tokens: " + tokens;
+            tokenText.text = "Level Tokens: " + (tokens > 100 ? "\u221e" : tokens);
             lifeText.text = "Lives: " + Mathf.Max(0, lives);
         }
     }

@@ -1,8 +1,7 @@
-using System;
 using Entity.Behaviours.Enemy;
 using UnityEngine;
 
-namespace Entity.Behaviours.Placeables.LaserBlaster
+namespace Entity.Behaviours.Placeables
 {
     /// <summary>
     /// Auto-aiming blaster that continuously does damage to an enemy.

@@ -18,7 +18,7 @@ namespace Entity.Behaviours.Enemy
         public void TakeDamage(float amount)
         {
             health -= amount;
-            if (health <= 0)
+            if (Mathf.RoundToInt(health) <= 0)
                 Destroy(gameObject);
         }
     }

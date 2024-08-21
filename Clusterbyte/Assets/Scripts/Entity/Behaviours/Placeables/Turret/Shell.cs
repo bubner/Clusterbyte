@@ -8,6 +8,9 @@ namespace Entity.Behaviours.Placeables.Turret
     /// </summary>
     public class Shell : MonoBehaviour
     {
+        private const int MAX_CONCURRENT_SOUNDS = 10;
+        private static int soundsNow;
+
         [SerializeField] private float maxDamage = 34f;
         [SerializeField] private float explosionRadius = 5f;
         [SerializeField] private float maxLifeTime = 2f;
@@ -17,16 +20,19 @@ namespace Entity.Behaviours.Placeables.Turret
 
         private bool hasActivated;
 
-        internal void Awake()
-        {
-            if (fireSound.clip.length > maxLifeTime)
-                Debug.LogWarning("SFX for shell explosion is longer than the max lifetime of the shell. This may cause unwanted clipping.");
-        }
+        // internal void Awake()
+        // {
+        //     if (fireSound.clip.length > maxLifeTime)
+        //         Debug.LogWarning("SFX for shell explosion is longer than the max lifetime of the shell. This may cause unwanted clipping.");
+        // }
 
         internal void Start()
         {
             Destroy(gameObject, maxLifeTime);
+            if (soundsNow >= MAX_CONCURRENT_SOUNDS)
+                return;
             fireSound.Play();
+            soundsNow++;
         }
 
         internal void OnCollisionEnter(Collision other)
@@ -66,6 +72,7 @@ namespace Entity.Behaviours.Placeables.Turret
             Destroy(GetComponent<Renderer>());
             Destroy(GetComponent<Collider>());
             Destroy(gameObject, fireSound.clip.length - fireSound.time);
+            soundsNow--;
         }
 
         private float CalculateDamage(Vector3 target)

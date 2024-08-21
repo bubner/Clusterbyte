@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace Entity.Behaviours.Placeables.Nuker
 {
+    /// <summary>
+    /// Nuke summoner.
+    /// </summary>
     public class Nuker : MonoBehaviour
     {
         /// <summary>
@@ -52,7 +55,7 @@ namespace Entity.Behaviours.Placeables.Nuker
 
             if (!nuked)
             {
-                Instantiate(nukePrefab, transform.position + new Vector3(0, 30, 0), Quaternion.Euler(90, 180, 0));
+                Instantiate(nukePrefab, transform.position + new Vector3(0, 20, 0), Quaternion.Euler(90, 180, 0));
                 nuked = true;
             }
 

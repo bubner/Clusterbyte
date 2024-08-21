@@ -21,6 +21,10 @@ namespace Entity.Factory
         [SerializeField] private GameObject genericMarkerPrefab;
         [SerializeField] private GameObject blobPrefab;
         [SerializeField] private GameObject dronePrefab;
+        [SerializeField] private GameObject gunnerPrefab;
+        [SerializeField] private GameObject zoomerPrefab;
+        [SerializeField] private GameObject tankPrefab;
+        [SerializeField] private GameObject bigBoyPrefab;
         [SerializeField] private GameObject followingHpBarPrefab;
         [SerializeField] private GameObject popupPrefab;
 
@@ -35,10 +39,14 @@ namespace Entity.Factory
 
             entities.Add(new ShopDeployable("Turret", turretPrefab, 5, "Locks onto the closest enemy and shoots at it. Shells deal Area-of-Effect damage. Normal radius."));
             entities.Add(new ShopDeployable("Laser Blaster", laserBlasterPrefab, 15, "Locks onto the closest enemy and continuously deals damage in a piercing beam that can hurt multiple enemies. Large radius."));
-            entities.Add(new ShopDeployable("Nuker", nukerPrefab, 30, "Destroyer of all existing things. Summons a nuke after charging, permanently damaging terrain and everything nearby. Loud. Requires at least three enemies to be in range."));
+            entities.Add(new ShopDeployable("Nuker", nukerPrefab, 30, "Destroyer of all existing things. Permanently damages terrain and everything nearby. Loud. Requires at least three enemies to be in range."));
+            entities.Add(new ShopDeployable("Gunner", gunnerPrefab, 20, "Shoots high-velocity high-accuracy bullets at enemies. Will shoot at the enemy with the highest health. Large locking radius."));
 
             entities.Add(new Mazeable("Blob", blobPrefab));
             entities.Add(new Mazeable("Drone", dronePrefab));
+            entities.Add(new Mazeable("Zoomer", zoomerPrefab));
+            entities.Add(new Mazeable("Tank", tankPrefab));
+            entities.Add(new Mazeable("Big Boy", bigBoyPrefab));
         }
 
         /// <summary>

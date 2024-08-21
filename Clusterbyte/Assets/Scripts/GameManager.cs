@@ -143,7 +143,7 @@ public class GameManager : StateManager
     public bool IsOccupied(Vector3 position)
     {
         return deployed
-            .Any(d => d.instance != null && Clusterbyte.ConvertTo2D(d.instance.transform.position) == Clusterbyte.ConvertTo2D(position));
+            .Any(d => d.instance != null && d.instance.activeSelf && Clusterbyte.ConvertTo2D(d.instance.transform.position) == Clusterbyte.ConvertTo2D(position));
     }
 
     /// <summary>
@@ -154,7 +154,7 @@ public class GameManager : StateManager
     public bool IsPlaceable(Vector3 position)
     {
         return placeableTerrain
-            .Any(t => t != null && Clusterbyte.ConvertTo2D(t.transform.position) == Clusterbyte.ConvertTo2D(position));
+            .Any(t => t != null && t.activeSelf && Clusterbyte.ConvertTo2D(t.transform.position) == Clusterbyte.ConvertTo2D(position));
     }
 
     /// <summary>
@@ -226,6 +226,7 @@ public class GameManager : StateManager
         ParseLevelMap(currentLevel);
         sendViewingWave = StartCoroutine(SendViewingWave(currentLevel));
         playerStats.SetStats(Clusterbyte.TOKENS_PER_LEVEL[currentLevel], save.lives);
+        statusText.text = $"Level {currentLevel + 1}";
     }
 
     private IEnumerator SendViewingWave(int level)
@@ -393,6 +394,19 @@ public class GameManager : StateManager
         enemies.Clear();
         waveCoroutines.Clear();
         statusText.text = $"Level {currentLevel + 1}";
+
+        // Check for terrain or placeables that are missing
+        // Must iterate in reverse to avoid concurrent modification
+        for (int i = deployed.Count - 1; i > 0; i--)
+        {
+            if (deployed[i].instance == null || !deployed[i].instance.activeSelf)
+                deployed.Remove(deployed[i]);
+        }
+        for (int i = placeableTerrain.Count - 1; i > 0; i--)
+        {
+            if (placeableTerrain[i] == null || !placeableTerrain[i].activeSelf)
+                placeableTerrain.Remove(placeableTerrain[i]);
+        }
 
         save.lives = playerStats.lives;
         SaveFile.SaveData(save);
